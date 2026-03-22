@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StockEdge Research</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
 :root{
   --gold:#C9A84C;--gold-light:#F5E6C0;--gold-dim:#7A6230;
@@ -214,11 +215,55 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
   .dash-nav-grid{grid-template-columns:1fr;}
   .pf-form-grid{grid-template-columns:1fr 1fr;}
 }
+
+/* ── Login screen ── */
+#login-screen{position:fixed;inset:0;background:var(--ink);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;}
+#login-screen.hidden{display:none;}
+.login-box{background:var(--ink2);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:2.5rem 2.25rem;width:100%;max-width:380px;text-align:center;}
+.login-logo{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--gold);margin-bottom:4px;}
+.login-logo span{color:#fff;font-style:italic;}
+.login-tagline{font-size:13px;color:#9E9690;margin-bottom:2rem;}
+.login-field{text-align:left;margin-bottom:1rem;}
+.login-field label{font-size:11px;color:#9E9690;display:block;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase;}
+.login-field input{width:100%;padding:11px 14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:10px;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;}
+.login-field input:focus{border-color:var(--gold);}
+.login-btn{width:100%;padding:12px;border-radius:10px;background:var(--gold);border:none;color:var(--ink);font-family:'DM Serif Display',serif;font-size:1rem;cursor:pointer;transition:background .15s;margin-top:.5rem;}
+.login-btn:hover{background:var(--gold-dim);color:#fff;}
+.login-btn:disabled{opacity:.5;cursor:not-allowed;}
+.login-msg{font-size:13px;margin-top:1rem;min-height:20px;}
+.login-msg.success{color:#5CC994;}
+.login-msg.error{color:#E07070;}
+#magic-sent{display:none;text-align:center;padding:1rem 0;}
+#magic-sent .magic-icon{font-size:48px;margin-bottom:1rem;}
+#magic-sent h3{font-family:'DM Serif Display',serif;font-size:1.4rem;color:#fff;margin-bottom:.5rem;}
+#magic-sent p{font-size:13px;color:#9E9690;line-height:1.6;}
+
 </style>
 </head>
 <body>
 
 <!-- ══ HEADER ══ -->
+<!-- ══ LOGIN SCREEN ══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div id="magic-form">
+      <div class="login-logo">Stock<span>Edge</span></div>
+      <div class="login-tagline">Private investment research · Authorised users only</div>
+      <div class="login-field">
+        <label>Email address</label>
+        <input type="email" id="login-email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')sendMagicLink()">
+      </div>
+      <button class="login-btn" id="login-btn" onclick="sendMagicLink()">Send login link</button>
+      <div class="login-msg" id="login-msg"></div>
+    </div>
+    <div id="magic-sent">
+      <div class="magic-icon">📬</div>
+      <h3>Check your email</h3>
+      <p>We sent a login link to <strong id="sent-email" style="color:#fff"></strong>.<br>Click it to sign in — the link expires in 1 hour.</p>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="logo">Stock<span>Edge</span></div>
 
@@ -237,6 +282,7 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
     </div>
   </div>
 
+  <button onclick="signOut()" style="font-size:11px;padding:5px 12px;border-radius:7px;border:1px solid rgba(255,255,255,.15);background:transparent;color:#9E9690;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#9E9690'">Sign out</button>
   <div class="header-status">
     <span class="status-dot" id="status-dot"></span>
     <span id="status-text">Connecting…</span>
@@ -474,27 +520,87 @@ const SUPABASE_URL  = 'https://itbzvalwgeuhmpfyybol.supabase.co';
 const SUPABASE_KEY  = 'sb_publishable_kSf8iGkU9q8VSg2vxk_vMQ_NEkzqJeD';
 const FINNHUB_KEY   = 'd6vm7a9r01qiiutcbpm0d6vm7a9r01qiiutcbpmg';
 const FMP_KEY       = 'L0bBRxdUGDYO6mkKq31pwnuqdlueZCLq';
+const SITE_URL      = 'https://michelleteo.github.io/stockedge/';
+const ALLOWLIST     = ['luvelle84@gmail.com','youseanchung@gmail.com'];
 
 const PALETTE = ['#C9A84C','#1E4D8C','#2D6A4F','#8B2635','#6B3FA0','#D85A30','#0F6E56','#185FA5'];
 const PALETTE_NAMES = ['Gold','Blue','Green','Red','Purple','Coral','Teal','Navy'];
 
 // ══════════════════════════════════════════════════
+// SUPABASE AUTH CLIENT
+// ══════════════════════════════════════════════════
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    storage: localStorage,
+    storageKey: 'stockedge-auth',
+  }
+});
+
+let currentSession = null;
+let currentUser    = null;
+
+// ══════════════════════════════════════════════════
 // STATE
 // ══════════════════════════════════════════════════
-let portfolios   = [];   // [{id, name, description, strategy_focus, color}]
-let holdings     = [];   // [{id, portfolio_id, ticker, name, sector, shares, buy, cur, div, strat, notes}]
+let portfolios   = [];
+let holdings     = [];
 let activePortfolioId = null;
 let editingPortfolioId = null;
 
 // ══════════════════════════════════════════════════
-// SUPABASE HELPERS
+// AUTH HELPERS
+// ══════════════════════════════════════════════════
+async function sendMagicLink(){
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const msg   = document.getElementById('login-msg');
+  const btn   = document.getElementById('login-btn');
+  msg.className='login-msg'; msg.textContent='';
+
+  if(!email){ msg.className='login-msg error'; msg.textContent='Please enter your email address.'; return; }
+  if(!ALLOWLIST.includes(email)){
+    msg.className='login-msg error';
+    msg.textContent='This email is not authorised. Please contact the administrator.';
+    return;
+  }
+  btn.disabled=true; btn.textContent='Sending…';
+  const { error } = await sb.auth.signInWithOtp({
+    email,
+    options:{ emailRedirectTo: SITE_URL }
+  });
+  btn.disabled=false; btn.textContent='Send login link';
+  if(error){ msg.className='login-msg error'; msg.textContent=error.message; return; }
+  document.getElementById('sent-email').textContent=email;
+  document.getElementById('magic-form').style.display='none';
+  document.getElementById('magic-sent').style.display='block';
+}
+
+async function signOut(){
+  await sb.auth.signOut();
+  currentSession=null; currentUser=null;
+  showLoginScreen();
+}
+
+function showLoginScreen(){
+  document.getElementById('login-screen').classList.remove('hidden');
+}
+function hideLoginScreen(){
+  document.getElementById('login-screen').classList.add('hidden');
+}
+
+// ══════════════════════════════════════════════════
+// SUPABASE HELPERS (auth-aware)
 // ══════════════════════════════════════════════════
 async function sbFetch(path, opts={}){
+  const token = currentSession?.access_token;
   const headers = {
     'apikey': SUPABASE_KEY,
     'Content-Type': 'application/json',
     'Prefer': opts.prefer || 'return=representation',
   };
+  if(token) headers['Authorization'] = 'Bearer ' + token;
   const fetchOpts = { method: opts.method || 'GET', headers };
   if(opts.body) fetchOpts.body = opts.body;
   const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, fetchOpts);
@@ -510,8 +616,15 @@ async function sbFetch(path, opts={}){
 async function loadAll(){
   setStatus('loading','Loading…');
   try {
-    portfolios = await sbFetch('portfolios?select=*&order=created_at.asc');
-    holdings   = await sbFetch('holdings?select=*&order=created_at.asc');
+    // Scope portfolios to the current user via user_id
+    const uid = currentUser.id;
+    portfolios = await sbFetch(`portfolios?select=*&user_id=eq.${uid}&order=created_at.asc`);
+    const pfIds = portfolios.map(p=>p.id);
+    if(pfIds.length){
+      holdings = await sbFetch(`holdings?select=*&portfolio_id=in.(${pfIds.join(',')})&order=created_at.asc`);
+    } else {
+      holdings = [];
+    }
     if(portfolios.length && !activePortfolioId) activePortfolioId = portfolios[0].id;
     setStatus('live','Live');
     renderAll();
@@ -526,7 +639,7 @@ async function loadAll(){
 // PORTFOLIO CRUD
 // ══════════════════════════════════════════════════
 async function createPortfolio(data){
-  const rows = await sbFetch('portfolios', {method:'POST', body:JSON.stringify(data)});
+  const rows = await sbFetch('portfolios', {method:'POST', body:JSON.stringify({...data, user_id: currentUser.id})});
   const pf = Array.isArray(rows)?rows[0]:rows;
   portfolios.push(pf);
   activePortfolioId = pf.id;
@@ -1078,10 +1191,42 @@ function renderAll(){
 }
 
 // ══════════════════════════════════════════════════
-// INIT
+// INIT — Auth gate
 // ══════════════════════════════════════════════════
 buildColorPicker();
-loadAll();
+
+// Listen for auth state changes (handles magic link redirect)
+sb.auth.onAuthStateChange(async (event, session) => {
+  if(event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED'){
+    currentSession = session;
+    currentUser    = session.user;
+    // Allowlist double-check client side
+    if(!ALLOWLIST.includes(currentUser.email)){
+      await sb.auth.signOut();
+      showLoginScreen();
+      document.getElementById('login-msg').className='login-msg error';
+      document.getElementById('login-msg').textContent='This email is not authorised.';
+      return;
+    }
+    hideLoginScreen();
+    loadAll();
+  } else if(event === 'SIGNED_OUT'){
+    showLoginScreen();
+  }
+});
+
+// On page load, check for existing session
+(async () => {
+  const { data:{ session } } = await sb.auth.getSession();
+  if(session && ALLOWLIST.includes(session.user.email)){
+    currentSession = session;
+    currentUser    = session.user;
+    hideLoginScreen();
+    loadAll();
+  } else {
+    showLoginScreen();
+  }
+})();
 </script>
 </body>
 </html>
