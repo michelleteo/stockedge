@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StockEdge Research</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --gold:#C9A84C;--gold-light:#F5E6C0;--gold-dim:#7A6230;
+  --ink:#1A1714;--ink2:#3A342E;--ink3:#6B6258;
+  --cream:#FAF7F2;--cream2:#F2EDE4;--cream3:#E8E0D2;
+  --white:#FFFFFF;
+  --green:#2D6A4F;--green-light:#D8F0E5;
+  --red:#8B2635;--red-light:#F5D8DC;
+  --blue:#1E4D8C;--blue-light:#D8E6F5;
+  --shadow:0 2px 16px rgba(26,23,20,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;}
+
+/* ── Header ── */
+header{background:var(--ink);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px;position:sticky;top:0;z-index:300;gap:1rem;}
+.logo{font-family:'DM Serif Display',serif;font-size:1.2rem;color:var(--gold);letter-spacing:.02em;white-space:nowrap;}
+.logo span{color:#fff;font-style:italic;}
+
+/* Portfolio dropdown */
+.pf-dropdown-wrap{position:relative;}
+.pf-dropdown-btn{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:7px 14px;cursor:pointer;color:#fff;font-size:13px;font-family:'DM Sans',sans-serif;transition:background .15s;white-space:nowrap;}
+.pf-dropdown-btn:hover{background:rgba(255,255,255,.12);}
+.pf-color-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;}
+.pf-dropdown-arrow{font-size:10px;color:#9E9690;margin-left:4px;}
+.pf-dropdown-menu{position:absolute;top:calc(100% + 8px);right:0;min-width:220px;background:var(--ink2);border:1px solid rgba(255,255,255,.1);border-radius:12px;overflow:hidden;z-index:400;box-shadow:0 8px 32px rgba(0,0,0,.4);}
+.pf-dropdown-menu.hidden{display:none;}
+.pf-menu-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:13px;color:#ccc;transition:background .12s;}
+.pf-menu-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+.pf-menu-item.active-pf{color:#fff;background:rgba(255,255,255,.05);}
+.pf-menu-divider{border:none;border-top:1px solid rgba(255,255,255,.08);margin:4px 0;}
+.pf-menu-create{color:var(--gold);font-weight:500;}
+.pf-menu-create:hover{background:rgba(201,168,76,.1);}
+
+.header-status{font-size:11px;color:var(--ink3);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.status-dot{width:6px;height:6px;border-radius:50%;background:#555;}
+.status-dot.live{background:#4CAF50;box-shadow:0 0 6px #4CAF5066;}
+.status-dot.loading{background:var(--gold);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── Tabs ── */
+.tab-bar{background:var(--ink2);display:flex;padding:0 2rem;overflow-x:auto;}
+.tab{font-size:13px;font-weight:400;color:var(--ink3);padding:13px 20px;cursor:pointer;border:none;background:transparent;border-bottom:2px solid transparent;white-space:nowrap;transition:color .2s,border-color .2s;display:flex;align-items:center;gap:6px;font-family:'DM Sans',sans-serif;}
+.tab:hover{color:var(--cream3);}
+.tab.active{color:var(--gold);border-bottom-color:var(--gold);font-weight:500;}
+
+/* ── Main ── */
+main{max-width:1240px;margin:0 auto;padding:2rem 2rem 4rem;}
+.section{display:none;animation:fadeIn .25s ease;}
+.section.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ── Strategy hero ── */
+.strategy-hero{background:var(--ink);border-radius:16px;padding:1.75rem 2rem;margin-bottom:1.5rem;display:flex;align-items:flex-start;gap:1.5rem;}
+.strategy-badge{width:52px;height:52px;border-radius:12px;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.strategy-hero h2{font-family:'DM Serif Display',serif;font-size:1.5rem;color:#fff;margin-bottom:5px;}
+.strategy-hero p{font-size:13px;color:#9E9690;line-height:1.65;max-width:680px;}
+.strategy-rules{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px;}
+.rule-chip{font-size:11px;padding:3px 11px;border-radius:99px;background:rgba(201,168,76,.15);color:var(--gold);border:1px solid rgba(201,168,76,.3);}
+
+/* ── Filters ── */
+.filter-section{margin-bottom:1.5rem;}
+.section-title{font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;}
+.filter-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:11px;}
+.filter-card{background:var(--white);border:1px solid var(--cream3);border-radius:11px;padding:13px 15px;}
+.filter-label{font-size:11px;color:var(--ink3);margin-bottom:5px;}
+.filter-value{font-size:16px;font-weight:500;color:var(--ink);margin-bottom:7px;}
+input[type=range]{width:100%;accent-color:var(--gold);cursor:pointer;}
+.range-bounds{display:flex;justify-content:space-between;font-size:10px;color:var(--ink3);margin-top:3px;}
+
+/* ── Pills ── */
+.pill-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:1.25rem;}
+.pill{font-size:12px;padding:5px 13px;border-radius:99px;border:1px solid var(--cream3);background:var(--white);color:var(--ink3);cursor:pointer;transition:all .15s;}
+.pill:hover{border-color:var(--gold-dim);color:var(--gold-dim);}
+.pill.active{background:var(--gold);color:var(--ink);border-color:var(--gold);font-weight:500;}
+
+/* ── Tables ── */
+.results-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.results-label{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;color:var(--ink3);}
+.results-count{font-size:12px;color:var(--ink3);}
+.table-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--cream3);}
+table{width:100%;border-collapse:collapse;background:var(--white);font-size:13px;}
+thead{background:var(--cream2);}
+th{text-align:left;padding:9px 13px;font-size:11px;font-weight:500;color:var(--ink3);text-transform:uppercase;letter-spacing:.05em;border-bottom:1px solid var(--cream3);white-space:nowrap;}
+td{padding:10px 13px;border-bottom:1px solid var(--cream3);color:var(--ink);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--cream);}
+.ticker{font-weight:500;font-size:14px;}
+.company{font-size:11px;color:var(--ink3);margin-top:1px;}
+.score-wrap{display:flex;align-items:center;gap:7px;}
+.score-bar-bg{width:56px;height:5px;background:var(--cream3);border-radius:3px;}
+.score-bar-fill{height:5px;border-radius:3px;}
+.score-num{font-size:12px;font-weight:500;min-width:26px;}
+.badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:99px;font-weight:500;}
+.badge-green{background:var(--green-light);color:var(--green);}
+.badge-amber{background:#FFF3CC;color:#7A5A00;}
+.badge-red{background:var(--red-light);color:var(--red);}
+.badge-blue{background:var(--blue-light);color:var(--blue);}
+.badge-gold{background:var(--gold-light);color:var(--gold-dim);}
+.no-results{text-align:center;padding:2.5rem 2rem;color:var(--ink3);font-size:13px;}
+hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
+.disclaimer{background:var(--cream2);border:1px solid var(--cream3);border-radius:10px;padding:11px 15px;font-size:11px;color:var(--ink3);margin-top:1.25rem;line-height:1.6;}
+
+/* ── Dashboard ── */
+.dash-portfolio-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;margin-bottom:1.5rem;}
+.dash-pf-card{background:var(--white);border:1px solid var(--cream3);border-radius:14px;padding:16px 18px;position:relative;overflow:hidden;}
+.dash-pf-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.dash-pf-card-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.dash-pf-name{font-weight:500;font-size:14px;}
+.dash-pf-tag{font-size:10px;color:var(--ink3);background:var(--cream2);padding:2px 8px;border-radius:99px;}
+.dash-pf-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.dash-pf-metric-label{font-size:10px;color:var(--ink3);margin-bottom:2px;}
+.dash-pf-metric-value{font-size:15px;font-weight:500;}
+
+.recs-panel{background:var(--white);border:1px solid var(--cream3);border-radius:14px;padding:1.5rem 1.75rem;margin-bottom:1.5rem;}
+.recs-panel-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:.25rem;}
+.recs-panel-header h3{font-family:'DM Serif Display',serif;font-size:1.05rem;}
+.recs-panel p{font-size:12px;color:var(--ink3);margin-bottom:1rem;}
+.rec-item{display:flex;align-items:center;gap:11px;padding:9px 0;border-bottom:1px solid var(--cream3);}
+.rec-item:last-child{border-bottom:none;}
+.rec-ticker-box{width:42px;height:42px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0;}
+.rec-ticker-box.new{background:var(--blue-light);color:var(--blue);}
+.rec-ticker-box.hold{background:var(--green-light);color:var(--green);}
+.rec-info{flex:1;min-width:0;}
+.rec-name{font-size:12.5px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rec-reason{font-size:11px;color:var(--ink3);margin-top:1px;line-height:1.4;}
+.rec-badges{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end;flex-shrink:0;}
+.rec-pf-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;margin-top:1px;}
+
+.dash-nav-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.5rem;}
+.dash-nav-card{background:var(--white);border:1px solid var(--cream3);border-radius:13px;padding:16px 18px;cursor:pointer;transition:box-shadow .2s,border-color .2s;}
+.dash-nav-card:hover{box-shadow:var(--shadow);border-color:var(--gold);}
+.dash-nav-icon{font-size:22px;margin-bottom:8px;}
+.dash-nav-title{font-family:'DM Serif Display',serif;font-size:1rem;margin-bottom:4px;}
+.dash-nav-desc{font-size:12px;color:var(--ink3);line-height:1.5;}
+.dash-nav-arrow{font-size:16px;color:var(--gold);margin-top:10px;}
+.learn-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;}
+.learn-card{background:var(--ink);border-radius:13px;padding:18px 20px;}
+.learn-card h3{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--gold);margin-bottom:7px;}
+.learn-card p{font-size:12px;color:#9E9690;line-height:1.6;}
+.learn-rule{margin-top:9px;}
+.learn-rule li{font-size:11.5px;color:#9E9690;margin-bottom:4px;padding-left:13px;position:relative;list-style:none;}
+.learn-rule li::before{content:"→";position:absolute;left:0;color:var(--gold);}
+
+/* ── My Portfolios tab ── */
+.pf-header-bar{background:var(--ink);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.25rem;display:flex;align-items:center;gap:14px;}
+.pf-header-color{width:40px;height:40px;border-radius:10px;flex-shrink:0;}
+.pf-header-name{font-family:'DM Serif Display',serif;font-size:1.3rem;color:#fff;}
+.pf-header-desc{font-size:12px;color:#9E9690;margin-top:2px;}
+.pf-header-tag{font-size:11px;padding:3px 10px;border-radius:99px;background:rgba(255,255,255,.1);color:#ccc;margin-top:5px;display:inline-block;}
+.pf-header-actions{margin-left:auto;display:flex;gap:8px;}
+.pf-header-btn{font-size:12px;padding:6px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.2);background:transparent;color:#ccc;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.pf-header-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
+.pf-header-btn.danger:hover{border-color:var(--red);color:#E07070;}
+
+.pf-add-form{background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;margin-bottom:1rem;}
+.pf-form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr)) 42px;gap:8px;align-items:end;}
+.pf-field label{font-size:11px;color:var(--ink3);margin-bottom:3px;display:block;}
+.pf-field input,.pf-field select{width:100%;padding:7px 9px;border:1px solid var(--cream3);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:12.5px;color:var(--ink);background:var(--cream);outline:none;}
+.pf-field input:focus,.pf-field select:focus{border-color:var(--gold);}
+.add-btn{width:38px;height:34px;border-radius:8px;background:var(--gold);border:none;cursor:pointer;font-size:18px;color:var(--ink);display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.add-btn:hover{background:var(--gold-dim);color:#fff;}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--ink3);font-size:14px;padding:3px 7px;border-radius:5px;}
+.del-btn:hover{color:var(--red);background:var(--red-light);}
+.pf-totals-bar{background:var(--ink);border-radius:11px;padding:14px 18px;margin-top:12px;}
+.pf-totals-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;}
+.pf-total-label{font-size:10px;color:#9E9690;margin-bottom:2px;}
+.pf-total-value{font-size:16px;font-weight:500;color:#fff;}
+.pf-empty{text-align:center;padding:2.5rem 2rem;color:var(--ink3);}
+.pf-empty-icon{font-size:36px;margin-bottom:10px;}
+.refresh-btn{font-size:11px;padding:5px 12px;border-radius:7px;border:1px solid var(--cream3);background:var(--white);color:var(--ink3);cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .15s;}
+.refresh-btn:hover{border-color:var(--gold);color:var(--gold-dim);}
+.refresh-btn.spinning span{display:inline-block;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Create portfolio modal ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(26,23,20,.6);z-index:500;align-items:center;justify-content:center;padding:1rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:18px;padding:2rem;max-width:440px;width:100%;position:relative;animation:modalIn .2s ease;}
+@keyframes modalIn{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:none}}
+.modal-close{position:absolute;top:13px;right:15px;background:none;border:none;font-size:19px;color:var(--ink3);cursor:pointer;padding:4px;}
+.modal-close:hover{color:var(--ink);}
+.modal h3{font-family:'DM Serif Display',serif;font-size:1.3rem;margin-bottom:1.25rem;}
+.modal-field{margin-bottom:1rem;}
+.modal-field label{font-size:12px;color:var(--ink3);display:block;margin-bottom:5px;}
+.modal-field input,.modal-field select,.modal-field textarea{width:100%;padding:9px 12px;border:1px solid var(--cream3);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--cream);outline:none;}
+.modal-field input:focus,.modal-field select:focus,.modal-field textarea:focus{border-color:var(--gold);}
+.color-picker{display:flex;gap:8px;flex-wrap:wrap;}
+.color-swatch{width:28px;height:28px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;}
+.color-swatch:hover{transform:scale(1.15);}
+.color-swatch.selected{border-color:var(--ink);transform:scale(1.15);}
+.modal-actions{display:flex;gap:8px;margin-top:1.25rem;justify-content:flex-end;}
+.btn-primary{padding:9px 20px;border-radius:9px;background:var(--gold);border:none;color:var(--ink);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s;}
+.btn-primary:hover{background:var(--gold-dim);color:#fff;}
+.btn-secondary{padding:9px 20px;border-radius:9px;background:transparent;border:1px solid var(--cream3);color:var(--ink3);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+.btn-secondary:hover{border-color:var(--ink3);color:var(--ink);}
+.btn-danger{padding:9px 20px;border-radius:9px;background:var(--red-light);border:none;color:var(--red);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:600;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){.dash-nav-grid{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){
+  header{padding:0 1rem;}
+  .tab-bar{padding:0 .5rem;}
+  main{padding:1rem 1rem 3rem;}
+  .strategy-hero{flex-direction:column;gap:1rem;padding:1.5rem;}
+  .dash-nav-grid{grid-template-columns:1fr;}
+  .pf-form-grid{grid-template-columns:1fr 1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header>
+  <div class="logo">Stock<span>Edge</span></div>
+
+  <div style="display:flex;align-items:center;gap:12px;flex:1;justify-content:center;max-width:400px;margin:0 auto;">
+    <div class="pf-dropdown-wrap" id="pf-dropdown-wrap">
+      <button class="pf-dropdown-btn" id="pf-dropdown-btn" onclick="togglePfMenu()">
+        <span class="pf-color-dot" id="header-dot" style="background:#C9A84C"></span>
+        <span id="header-pf-name">My Portfolios</span>
+        <span class="pf-dropdown-arrow">▾</span>
+      </button>
+      <div class="pf-dropdown-menu hidden" id="pf-dropdown-menu">
+        <div id="pf-menu-list"></div>
+        <hr class="pf-menu-divider">
+        <div class="pf-menu-item pf-menu-create" onclick="openCreateModal()">＋ Create new portfolio</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="header-status">
+    <span class="status-dot" id="status-dot"></span>
+    <span id="status-text">Connecting…</span>
+  </div>
+</header>
+
+<!-- ══ TABS ══ -->
+<div class="tab-bar">
+  <button class="tab active" data-tab="dashboard">🏠 Dashboard</button>
+  <button class="tab" data-tab="portfolio">💼 My Portfolios</button>
+  <button class="tab" data-tab="covered-call">📞 Covered Calls</button>
+  <button class="tab" data-tab="buffett">🏦 Buffett Screen</button>
+  <button class="tab" data-tab="darvas">📈 Darvas Boxes</button>
+</div>
+
+<main>
+
+<!-- ══ DASHBOARD ══ -->
+<div class="section active" id="tab-dashboard">
+  <div style="margin-bottom:1.25rem;display:flex;align-items:baseline;justify-content:space-between;">
+    <div>
+      <h1 style="font-family:'DM Serif Display',serif;font-size:1.75rem;margin-bottom:5px;">Overview</h1>
+      <p style="font-size:13px;color:var(--ink3);">Combined view across all your portfolios.</p>
+    </div>
+  </div>
+
+  <div class="section-title">Portfolio breakdown</div>
+  <div class="dash-portfolio-cards" id="dash-pf-cards">
+    <div style="color:var(--ink3);font-size:13px;padding:1rem 0;">Loading portfolios…</div>
+  </div>
+
+  <div class="recs-panel">
+    <div class="recs-panel-header"><h3>✨ Recommendations</h3></div>
+    <p>Stocks flagged across all portfolios and screeners based on your current filter settings.</p>
+    <div id="recs-list"><div style="font-size:13px;color:var(--ink3);">Loading…</div></div>
+  </div>
+
+  <div class="section-title">Strategy screeners</div>
+  <div class="dash-nav-grid">
+    <div class="dash-nav-card" onclick="switchTab('covered-call')"><div class="dash-nav-icon">📞</div><div class="dash-nav-title">Covered Calls</div><div class="dash-nav-desc">Find stocks with ideal IV and premium yield to generate monthly income.</div><div class="dash-nav-arrow">→</div></div>
+    <div class="dash-nav-card" onclick="switchTab('buffett')"><div class="dash-nav-icon">🏦</div><div class="dash-nav-title">Buffett Value</div><div class="dash-nav-desc">Filter for moat-worthy businesses with low P/E, high ROE, consistent earnings.</div><div class="dash-nav-arrow">→</div></div>
+    <div class="dash-nav-card" onclick="switchTab('darvas')"><div class="dash-nav-icon">📈</div><div class="dash-nav-title">Darvas Boxes</div><div class="dash-nav-desc">Spot high-volume breakouts from tight consolidation zones.</div><div class="dash-nav-arrow">→</div></div>
+  </div>
+  <hr class="divider">
+  <div class="section-title">Strategy primer</div>
+  <div class="learn-grid">
+    <div class="learn-card"><h3>📞 Covered Calls</h3><p>Sell call options on stocks you own to collect premium income every month.</p><ul class="learn-rule"><li>Own 100+ shares of the stock</li><li>Sell a call 2–5% above current price</li><li>Target 30–45 day expiry, 0.20–0.40 delta</li><li>Keep the premium whether exercised or not</li></ul></div>
+    <div class="learn-card"><h3>🏦 Warren Buffett</h3><p>Buy wonderful companies at fair prices and hold them forever.</p><ul class="learn-rule"><li>P/E below 25, ROE above 15%</li><li>Consistent earnings growth 5+ years</li><li>Low debt, strong free cash flow</li><li>Businesses you can understand</li></ul></div>
+    <div class="learn-card"><h3>📈 Nicholas Darvas</h3><p>Buy stocks breaking out of tight "boxes" on high volume and ride the trend.</p><ul class="learn-rule"><li>Price forms a tight range (the "box")</li><li>Breakout on 2x+ average volume</li><li>Stop-loss just below the box floor</li><li>Only buy in strong uptrends</li></ul></div>
+  </div>
+  <div class="disclaimer">⚠️ <strong>Important:</strong> This tool is for educational and research purposes only. Live data is provided by Finnhub and FMP. This is not financial advice. Please consult a licensed financial adviser before making investment decisions.</div>
+</div>
+
+<!-- ══ MY PORTFOLIOS ══ -->
+<div class="section" id="tab-portfolio">
+  <div id="pf-header-bar-wrap"></div>
+
+  <div class="pf-add-form">
+    <div class="section-title" style="margin-bottom:10px;">Add a holding</div>
+    <div class="pf-form-grid" id="pf-add-form">
+      <div class="pf-field"><label>Ticker</label><input id="pf-ticker" placeholder="AAPL" maxlength="6" style="text-transform:uppercase"></div>
+      <div class="pf-field"><label>Company</label><input id="pf-name" placeholder="Apple Inc."></div>
+      <div class="pf-field"><label>Sector</label>
+        <select id="pf-sector">
+          <option>Technology</option><option>Healthcare</option><option>Finance</option>
+          <option>Consumer</option><option>Energy</option><option>Industrial</option><option>Other</option>
+        </select>
+      </div>
+      <div class="pf-field"><label>Shares</label><input id="pf-shares" type="number" placeholder="100" min="0"></div>
+      <div class="pf-field"><label>Avg buy ($)</label><input id="pf-buy" type="number" placeholder="150.00" step="0.01"></div>
+      <div class="pf-field"><label>Current ($)</label><input id="pf-cur" type="number" placeholder="175.00" step="0.01"></div>
+      <div class="pf-field"><label>Dividends ($)</label><input id="pf-div" type="number" placeholder="0.00" step="0.01"></div>
+      <div class="pf-field"><label>Strategy tag</label>
+        <select id="pf-strat">
+          <option value="Buffett">🏦 Buffett</option><option value="Darvas">📈 Darvas</option>
+          <option value="CoveredCall">📞 Covered Call</option><option value="Mixed">⚡ Mixed</option><option value="None">— None</option>
+        </select>
+      </div>
+      <div class="pf-field"><label>Notes</label><input id="pf-notes" placeholder="Optional"></div>
+      <button class="add-btn" onclick="addHolding()" title="Add">+</button>
+    </div>
+  </div>
+
+  <div class="results-bar">
+    <div class="results-label">Holdings</div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="results-count" id="pf-count">0 stocks</span>
+      <button class="refresh-btn" id="refresh-btn" onclick="refreshPrices()"><span>↻</span> Refresh prices</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Stock</th><th>Sector</th><th>Shares</th><th>Avg buy</th><th>Current</th><th>Market value</th><th>P&L ($)</th><th>P&L (%)</th><th>Dividends</th><th>Strategy</th><th>Notes</th><th></th></tr></thead>
+      <tbody id="pf-tbody"></tbody>
+    </table>
+  </div>
+  <div id="pf-empty" class="pf-empty" style="display:none;"><div class="pf-empty-icon">💼</div><div style="font-weight:500;margin-bottom:5px;">No holdings yet</div><div style="font-size:12px;">Add your first stock above.</div></div>
+  <div id="pf-totals-bar" style="display:none;" class="pf-totals-bar">
+    <div class="pf-totals-grid">
+      <div><div class="pf-total-label">Total invested</div><div class="pf-total-value" id="pf-tot-invested">—</div></div>
+      <div><div class="pf-total-label">Market value</div><div class="pf-total-value" id="pf-tot-value">—</div></div>
+      <div><div class="pf-total-label">Total P&L</div><div class="pf-total-value" id="pf-tot-pnl">—</div></div>
+      <div><div class="pf-total-label">Return %</div><div class="pf-total-value" id="pf-tot-pct">—</div></div>
+      <div><div class="pf-total-label">Dividends</div><div class="pf-total-value" style="color:#5CC994" id="pf-tot-div">—</div></div>
+    </div>
+  </div>
+  <div class="disclaimer">💡 Holdings are saved to Supabase and sync across all your devices automatically. Click "Refresh prices" to pull live prices from Finnhub.</div>
+</div>
+
+<!-- ══ COVERED CALL ══ -->
+<div class="section" id="tab-covered-call">
+  <div class="strategy-hero"><div class="strategy-badge">📞</div><div>
+    <h2>Covered Call Screener</h2>
+    <p>Screen for stocks with liquid options markets, ideal implied volatility, and attractive premium yields.</p>
+    <div class="strategy-rules"><span class="rule-chip">IV &gt; 20%</span><span class="rule-chip">Delta 0.20–0.40</span><span class="rule-chip">30–45 DTE</span><span class="rule-chip">Vol &gt; 5,000/day</span><span class="rule-chip">Premium &gt; 1.5%</span></div>
+  </div></div>
+  <div class="filter-section"><div class="section-title">Filters</div>
+    <div class="filter-grid">
+      <div class="filter-card"><div class="filter-label">Min implied volatility</div><div class="filter-value" id="cc-iv-val">20%</div><input type="range" min="10" max="60" value="20" step="1" id="cc-iv"><div class="range-bounds"><span>10%</span><span>60%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min options volume</div><div class="filter-value" id="cc-vol-val">5,000</div><input type="range" min="1000" max="50000" value="5000" step="1000" id="cc-vol"><div class="range-bounds"><span>1K</span><span>50K</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min premium yield</div><div class="filter-value" id="cc-prem-val">1.5%</div><input type="range" min="0.5" max="10" value="1.5" step="0.5" id="cc-prem"><div class="range-bounds"><span>0.5%</span><span>10%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min DTE</div><div class="filter-value" id="cc-dte-min-val">20d</div><input type="range" min="7" max="90" value="20" step="1" id="cc-dte-min"><div class="range-bounds"><span>7d</span><span>90d</span></div></div>
+      <div class="filter-card"><div class="filter-label">Max DTE</div><div class="filter-value" id="cc-dte-max-val">50d</div><input type="range" min="7" max="90" value="50" step="1" id="cc-dte-max"><div class="range-bounds"><span>7d</span><span>90d</span></div></div>
+      <div class="filter-card"><div class="filter-label">Target delta</div><div class="filter-value" id="cc-delta-val">0.20–0.40</div><input type="range" min="10" max="50" value="20" step="5" id="cc-delta"><div class="range-bounds"><span>OTM 0.10</span><span>ATM 0.50</span></div></div>
+    </div>
+  </div>
+  <div class="section-title">Sector</div>
+  <div class="pill-group" id="cc-sectors">
+    <button class="pill active" data-sector="All">All</button><button class="pill" data-sector="Technology">Technology</button><button class="pill" data-sector="Healthcare">Healthcare</button><button class="pill" data-sector="Finance">Finance</button><button class="pill" data-sector="Consumer">Consumer</button><button class="pill" data-sector="Energy">Energy</button>
+  </div>
+  <div class="results-bar"><div class="results-label">Results</div><div class="results-count" id="cc-count"></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Stock</th><th>Sector</th><th>IV</th><th>Options vol.</th><th>Premium yield</th><th>DTE</th><th>Delta</th><th>Score</th><th>Signal</th><th>Held in</th></tr></thead><tbody id="cc-tbody"></tbody></table></div>
+  <div class="disclaimer">* Screener data is sample data. Live options data via Finnhub requires a paid plan. Current prices are live via Finnhub free tier.</div>
+</div>
+
+<!-- ══ BUFFETT ══ -->
+<div class="section" id="tab-buffett">
+  <div class="strategy-hero"><div class="strategy-badge">🏦</div><div>
+    <h2>Warren Buffett Value Screen</h2>
+    <p>Find wonderful businesses at fair prices with durable moats, predictable earnings, low debt, and strong ROE.</p>
+    <div class="strategy-rules"><span class="rule-chip">P/E &lt; 25</span><span class="rule-chip">ROE &gt; 15%</span><span class="rule-chip">Debt/Eq &lt; 1</span><span class="rule-chip">5yr EPS growth</span><span class="rule-chip">Wide moat</span></div>
+  </div></div>
+  <div class="filter-section"><div class="section-title">Value criteria</div>
+    <div class="filter-grid">
+      <div class="filter-card"><div class="filter-label">Max P/E ratio</div><div class="filter-value" id="buf-pe-val">25×</div><input type="range" min="5" max="50" value="25" step="1" id="buf-pe"><div class="range-bounds"><span>5×</span><span>50×</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min ROE</div><div class="filter-value" id="buf-roe-val">15%</div><input type="range" min="5" max="40" value="15" step="1" id="buf-roe"><div class="range-bounds"><span>5%</span><span>40%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Max debt/equity</div><div class="filter-value" id="buf-de-val">1.0×</div><input type="range" min="0.1" max="3" value="1.0" step="0.1" id="buf-de"><div class="range-bounds"><span>0.1×</span><span>3×</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min 5yr EPS growth</div><div class="filter-value" id="buf-eg-val">8%</div><input type="range" min="2" max="30" value="8" step="1" id="buf-eg"><div class="range-bounds"><span>2%</span><span>30%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min FCF yield</div><div class="filter-value" id="buf-fcf-val">3%</div><input type="range" min="1" max="15" value="3" step="0.5" id="buf-fcf"><div class="range-bounds"><span>1%</span><span>15%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min dividend yield</div><div class="filter-value" id="buf-div-val">0%</div><input type="range" min="0" max="6" value="0" step="0.5" id="buf-div"><div class="range-bounds"><span>0%</span><span>6%</span></div></div>
+    </div>
+  </div>
+  <div class="section-title">Moat type</div>
+  <div class="pill-group" id="buf-moat">
+    <button class="pill active" data-moat="All">All</button><button class="pill" data-moat="Brand">Brand</button><button class="pill" data-moat="Network">Network</button><button class="pill" data-moat="Cost">Cost advantage</button><button class="pill" data-moat="Switch">Switching costs</button><button class="pill" data-moat="IP">IP / Patents</button>
+  </div>
+  <div class="results-bar"><div class="results-label">Results</div><div class="results-count" id="buf-count"></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Stock</th><th>Sector</th><th>P/E</th><th>ROE</th><th>Debt/Eq.</th><th>5yr EPS</th><th>FCF yield</th><th>Div yield</th><th>Moat</th><th>Score</th><th>Held in</th></tr></thead><tbody id="buf-tbody"></tbody></table></div>
+  <div class="disclaimer">* Fundamental data powered by FMP (Financial Modeling Prep). Refresh fundamentals periodically for accuracy.</div>
+</div>
+
+<!-- ══ DARVAS ══ -->
+<div class="section" id="tab-darvas">
+  <div class="strategy-hero"><div class="strategy-badge">📈</div><div>
+    <h2>Darvas Box Momentum Screen</h2>
+    <p>Nicholas Darvas turned $25,000 into $2,250,000 in 18 months. Buy breakouts from tight consolidation boxes on surging volume.</p>
+    <div class="strategy-rules"><span class="rule-chip">Near 52-wk high</span><span class="rule-chip">2× volume</span><span class="rule-chip">Tight box</span><span class="rule-chip">Strong uptrend</span><span class="rule-chip">Stop = box floor</span></div>
+  </div></div>
+  <div class="filter-section"><div class="section-title">Momentum criteria</div>
+    <div class="filter-grid">
+      <div class="filter-card"><div class="filter-label">Within % of 52-wk high</div><div class="filter-value" id="dv-high-val">Within 10%</div><input type="range" min="1" max="40" value="10" step="1" id="dv-high"><div class="range-bounds"><span>1%</span><span>40%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min volume surge</div><div class="filter-value" id="dv-vol-val">1.5×</div><input type="range" min="1.0" max="5" value="1.5" step="0.5" id="dv-vol"><div class="range-bounds"><span>1×</span><span>5×</span></div></div>
+      <div class="filter-card"><div class="filter-label">Max box tightness</div><div class="filter-value" id="dv-box-val">15%</div><input type="range" min="3" max="30" value="15" step="1" id="dv-box"><div class="range-bounds"><span>3%</span><span>30%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min 3-month gain</div><div class="filter-value" id="dv-mom-val">10%</div><input type="range" min="0" max="60" value="10" step="5" id="dv-mom"><div class="range-bounds"><span>0%</span><span>60%</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min relative strength</div><div class="filter-value" id="dv-rs-val">70</div><input type="range" min="40" max="99" value="70" step="1" id="dv-rs"><div class="range-bounds"><span>40</span><span>99</span></div></div>
+      <div class="filter-card"><div class="filter-label">Max weeks in box</div><div class="filter-value" id="dv-wks-val">8 weeks</div><input type="range" min="2" max="20" value="8" step="1" id="dv-wks"><div class="range-bounds"><span>2 wks</span><span>20 wks</span></div></div>
+    </div>
+  </div>
+  <div class="section-title">Breakout status</div>
+  <div class="pill-group" id="dv-status">
+    <button class="pill active" data-status="All">All</button><button class="pill" data-status="Breaking">🔥 Breaking out</button><button class="pill" data-status="Forming">📦 Box forming</button><button class="pill" data-status="Recent">✅ Recent breakout</button>
+  </div>
+  <div class="results-bar"><div class="results-label">Results</div><div class="results-count" id="dv-count"></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Stock</th><th>Sector</th><th>Box high</th><th>Box low</th><th>Tightness</th><th>Vol surge</th><th>3m gain</th><th>RS</th><th>Status</th><th>Score</th><th>Held in</th></tr></thead><tbody id="dv-tbody"></tbody></table></div>
+  <div class="disclaimer">* Darvas box data is sample/illustrative. Always confirm breakout with real-time charts before trading.</div>
+</div>
+
+</main>
+
+<!-- ══ CREATE PORTFOLIO MODAL ══ -->
+<div class="modal-overlay" id="create-modal" onclick="closeModalOutside(event,'create-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('create-modal')">✕</button>
+    <h3 id="create-modal-title">Create portfolio</h3>
+    <div class="modal-field"><label>Portfolio name *</label><input id="new-pf-name" placeholder="e.g. Michelle's Growth"></div>
+    <div class="modal-field"><label>Description</label><input id="new-pf-desc" placeholder="e.g. Long-term Buffett holds"></div>
+    <div class="modal-field"><label>Strategy focus</label>
+      <select id="new-pf-strat">
+        <option value="Mixed">⚡ Mixed</option><option value="Buffett">🏦 Buffett</option>
+        <option value="Darvas">📈 Darvas</option><option value="CoveredCall">📞 Covered Call</option>
+      </select>
+    </div>
+    <div class="modal-field"><label>Colour</label>
+      <div class="color-picker" id="color-picker"></div>
+      <input type="hidden" id="new-pf-color" value="#C9A84C">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('create-modal')">Cancel</button>
+      <button class="btn-primary" id="create-modal-submit" onclick="submitPortfolioForm()">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM DELETE MODAL ══ -->
+<div class="modal-overlay" id="delete-modal" onclick="closeModalOutside(event,'delete-modal')">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('delete-modal')">✕</button>
+    <h3>Delete portfolio?</h3>
+    <p style="font-size:13px;color:var(--ink3);margin:1rem 0;line-height:1.6;">This will permanently delete <strong id="delete-pf-name"></strong> and all its holdings. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn-danger" onclick="confirmDeletePortfolio()">Delete permanently</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════
+// CONFIG
+// ══════════════════════════════════════════════════
+const SUPABASE_URL  = 'https://itbzvalwgeuhmpfyybol.supabase.co';
+const SUPABASE_KEY  = 'sb_publishable_kSf8iGkU9q8VSg2vxk_vMQ_NEkzqJeD';
+const FINNHUB_KEY   = 'd6vm7a9r01qiiutcbpm0d6vm7a9r01qiiutcbpmg';
+const FMP_KEY       = 'L0bBRxdUGDYO6mkKq31pwnuqdlueZCLq';
+
+const PALETTE = ['#C9A84C','#1E4D8C','#2D6A4F','#8B2635','#6B3FA0','#D85A30','#0F6E56','#185FA5'];
+const PALETTE_NAMES = ['Gold','Blue','Green','Red','Purple','Coral','Teal','Navy'];
+
+// ══════════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════════
+let portfolios   = [];   // [{id, name, description, strategy_focus, color}]
+let holdings     = [];   // [{id, portfolio_id, ticker, name, sector, shares, buy, cur, div, strat, notes}]
+let activePortfolioId = null;
+let editingPortfolioId = null;
+
+// ══════════════════════════════════════════════════
+// SUPABASE HELPERS
+// ══════════════════════════════════════════════════
+async function sbFetch(path, opts={}){
+  const headers = {
+    'apikey': SUPABASE_KEY,
+    'Content-Type': 'application/json',
+    'Prefer': opts.prefer || 'return=representation',
+  };
+  const fetchOpts = { method: opts.method || 'GET', headers };
+  if(opts.body) fetchOpts.body = opts.body;
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, fetchOpts);
+  if(!res.ok){
+    const err = await res.text();
+    console.error('Supabase error:', res.status, path, err);
+    throw new Error(`${res.status}: ${err}`);
+  }
+  const txt = await res.text();
+  return txt ? JSON.parse(txt) : [];
+}
+
+async function loadAll(){
+  setStatus('loading','Loading…');
+  try {
+    portfolios = await sbFetch('portfolios?select=*&order=created_at.asc');
+    holdings   = await sbFetch('holdings?select=*&order=created_at.asc');
+    if(portfolios.length && !activePortfolioId) activePortfolioId = portfolios[0].id;
+    setStatus('live','Live');
+    renderAll();
+  } catch(e){
+    setStatus('error','Offline — check connection');
+    showToast('Could not connect to Supabase. Check your network.');
+    console.error(e);
+  }
+}
+
+// ══════════════════════════════════════════════════
+// PORTFOLIO CRUD
+// ══════════════════════════════════════════════════
+async function createPortfolio(data){
+  const rows = await sbFetch('portfolios', {method:'POST', body:JSON.stringify(data)});
+  const pf = Array.isArray(rows)?rows[0]:rows;
+  portfolios.push(pf);
+  activePortfolioId = pf.id;
+  renderAll();
+  showToast(`Portfolio "${pf.name}" created`);
+  return pf;
+}
+
+async function deletePortfolio(id){
+  await sbFetch(`holdings?portfolio_id=eq.${id}`, {method:'DELETE', prefer:'return=minimal', prefer:'return=minimal'});
+  await sbFetch(`portfolios?id=eq.${id}`, {method:'DELETE', prefer:'return=minimal', prefer:'return=minimal'});
+  portfolios = portfolios.filter(p=>p.id!==id);
+  holdings   = holdings.filter(h=>h.portfolio_id!==id);
+  activePortfolioId = portfolios.length ? portfolios[0].id : null;
+  renderAll();
+  showToast('Portfolio deleted');
+}
+
+// ══════════════════════════════════════════════════
+// HOLDINGS CRUD
+// ══════════════════════════════════════════════════
+async function addHolding(){
+  if(!activePortfolioId){ showToast('Select or create a portfolio first'); return; }
+  const ticker = document.getElementById('pf-ticker').value.trim().toUpperCase();
+  const name   = document.getElementById('pf-name').value.trim();
+  const sector = document.getElementById('pf-sector').value;
+  const shares = parseFloat(document.getElementById('pf-shares').value);
+  const buy    = parseFloat(document.getElementById('pf-buy').value);
+  const cur    = parseFloat(document.getElementById('pf-cur').value)||0;
+  const div    = parseFloat(document.getElementById('pf-div').value)||0;
+  const strat  = document.getElementById('pf-strat').value;
+  const notes  = document.getElementById('pf-notes').value.trim();
+  if(!ticker||!name||isNaN(shares)||isNaN(buy)){showToast('Fill in Ticker, Company, Shares and Buy Price');return;}
+  try {
+    const rows = await sbFetch('holdings', {method:'POST', body:JSON.stringify({portfolio_id:activePortfolioId,ticker,name,sector,shares,buy,cur,div,strat,notes})});
+    holdings.push(Array.isArray(rows)?rows[0]:rows);
+    ['pf-ticker','pf-name','pf-shares','pf-buy','pf-cur','pf-div','pf-notes'].forEach(id=>document.getElementById(id).value='');
+    renderAll();
+    showToast(`${ticker} added`);
+  } catch(e){ showToast('Error saving holding'); console.error(e); }
+}
+
+async function deleteHolding(id){
+  await sbFetch(`holdings?id=eq.${id}`,{method:'DELETE',prefer:'return=minimal'});
+  holdings = holdings.filter(h=>h.id!==id);
+  renderAll();
+}
+
+// ══════════════════════════════════════════════════
+// LIVE PRICES — FINNHUB
+// ══════════════════════════════════════════════════
+async function refreshPrices(){
+  const btn = document.getElementById('refresh-btn');
+  btn.classList.add('spinning');
+  btn.querySelector('span').textContent='↻';
+  const tickers = [...new Set(holdings.map(h=>h.ticker))];
+  let updated = 0;
+  for(const ticker of tickers){
+    try {
+      const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FINNHUB_KEY}`);
+      const data = await res.json();
+      if(data.c && data.c>0){
+        // update in DB
+        await sbFetch(`holdings?ticker=eq.${ticker}&portfolio_id=in.(${portfolios.map(p=>p.id).join(',')})`,{
+          method:'PATCH', body:JSON.stringify({cur:data.c}), prefer:'return=minimal'
+        });
+        holdings.forEach(h=>{ if(h.ticker===ticker) h.cur=data.c; });
+        updated++;
+      }
+    } catch(e){ console.warn(`Price fetch failed for ${ticker}`,e); }
+  }
+  btn.classList.remove('spinning');
+  btn.querySelector('span').textContent='↻';
+  renderAll();
+  showToast(`Updated prices for ${updated} stock${updated!==1?'s':''}`);
+}
+
+// ══════════════════════════════════════════════════
+// PORTFOLIO DROPDOWN
+// ══════════════════════════════════════════════════
+function togglePfMenu(){
+  document.getElementById('pf-dropdown-menu').classList.toggle('hidden');
+}
+document.addEventListener('click',e=>{
+  if(!document.getElementById('pf-dropdown-wrap').contains(e.target))
+    document.getElementById('pf-dropdown-menu').classList.add('hidden');
+});
+
+function renderPfDropdown(){
+  const activePf = portfolios.find(p=>p.id===activePortfolioId);
+  const dot = document.getElementById('header-dot');
+  const nameEl = document.getElementById('header-pf-name');
+  if(activePf){ dot.style.background=activePf.color||'#C9A84C'; nameEl.textContent=activePf.name; }
+  else { dot.style.background='#555'; nameEl.textContent='My Portfolios'; }
+
+  const list = document.getElementById('pf-menu-list');
+  if(!portfolios.length){ list.innerHTML='<div class="pf-menu-item" style="color:var(--ink3);cursor:default;">No portfolios yet</div>'; return; }
+  list.innerHTML = portfolios.map(p=>`
+    <div class="pf-menu-item ${p.id===activePortfolioId?'active-pf':''}" onclick="selectPortfolio(${p.id})">
+      <span class="pf-color-dot" style="background:${p.color||'#C9A84C'}"></span>
+      <span style="flex:1">${p.name}</span>
+      ${p.id===activePortfolioId?'<span style="font-size:10px;color:var(--gold)">✓</span>':''}
+    </div>`).join('');
+}
+
+function selectPortfolio(id){
+  activePortfolioId = id;
+  document.getElementById('pf-dropdown-menu').classList.add('hidden');
+  renderAll();
+}
+
+// ══════════════════════════════════════════════════
+// CREATE / EDIT PORTFOLIO MODAL
+// ══════════════════════════════════════════════════
+function buildColorPicker(){
+  const el = document.getElementById('color-picker');
+  el.innerHTML = PALETTE.map((c,i)=>`<div class="color-swatch ${i===0?'selected':''}" style="background:${c}" title="${PALETTE_NAMES[i]}" onclick="selectColor('${c}',this)"></div>`).join('');
+}
+function selectColor(hex, el){
+  document.querySelectorAll('.color-swatch').forEach(s=>s.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('new-pf-color').value=hex;
+}
+
+function openCreateModal(pfId=null){
+  editingPortfolioId = pfId;
+  document.getElementById('create-modal-title').textContent = pfId ? 'Edit portfolio' : 'Create portfolio';
+  document.getElementById('create-modal-submit').textContent = pfId ? 'Save changes' : 'Create';
+  if(pfId){
+    const pf = portfolios.find(p=>p.id===pfId);
+    document.getElementById('new-pf-name').value = pf.name||'';
+    document.getElementById('new-pf-desc').value = pf.description||'';
+    document.getElementById('new-pf-strat').value = pf.strategy_focus||'Mixed';
+    document.getElementById('new-pf-color').value = pf.color||PALETTE[0];
+    document.querySelectorAll('.color-swatch').forEach(s=>{ s.classList.toggle('selected',s.style.background===hexToRgb(pf.color)||s.title===PALETTE_NAMES[PALETTE.indexOf(pf.color)]); });
+  } else {
+    document.getElementById('new-pf-name').value='';
+    document.getElementById('new-pf-desc').value='';
+    document.getElementById('new-pf-strat').value='Mixed';
+    document.getElementById('new-pf-color').value=PALETTE[0];
+    document.querySelectorAll('.color-swatch').forEach((s,i)=>s.classList.toggle('selected',i===0));
+  }
+  document.getElementById('pf-dropdown-menu').classList.add('hidden');
+  document.getElementById('create-modal').classList.add('open');
+}
+
+function hexToRgb(hex){ return hex; } // simple pass-through for comparison
+
+async function submitPortfolioForm(){
+  const name  = document.getElementById('new-pf-name').value.trim();
+  const desc  = document.getElementById('new-pf-desc').value.trim();
+  const strat = document.getElementById('new-pf-strat').value;
+  const color = document.getElementById('new-pf-color').value;
+  if(!name){ showToast('Please enter a portfolio name'); return; }
+  closeModal('create-modal');
+  if(editingPortfolioId){
+    await sbFetch(`portfolios?id=eq.${editingPortfolioId}`,{method:'PATCH',body:JSON.stringify({name,description:desc,strategy_focus:strat,color}),prefer:'return=minimal'});
+    const pf = portfolios.find(p=>p.id===editingPortfolioId);
+    Object.assign(pf,{name,description:desc,strategy_focus:strat,color});
+    showToast('Portfolio updated');
+  } else {
+    await createPortfolio({name,description:desc,strategy_focus:strat,color});
+  }
+  renderAll();
+}
+
+let pfToDelete = null;
+function openDeleteModal(id){
+  pfToDelete = id;
+  const pf = portfolios.find(p=>p.id===id);
+  document.getElementById('delete-pf-name').textContent = pf?.name||'this portfolio';
+  document.getElementById('delete-modal').classList.add('open');
+}
+async function confirmDeletePortfolio(){
+  closeModal('delete-modal');
+  if(pfToDelete) await deletePortfolio(pfToDelete);
+  pfToDelete=null;
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+function closeModalOutside(e,id){ if(e.target===document.getElementById(id)) closeModal(id); }
+
+// ══════════════════════════════════════════════════
+// RENDER — PORTFOLIO TAB
+// ══════════════════════════════════════════════════
+function renderPortfolioTab(){
+  const pf = portfolios.find(p=>p.id===activePortfolioId);
+  const wrap = document.getElementById('pf-header-bar-wrap');
+  if(!pf){ wrap.innerHTML=`<div style="text-align:center;padding:3rem;color:var(--ink3)"><div style="font-size:36px;margin-bottom:12px">💼</div><div style="font-weight:500;margin-bottom:6px">No portfolio selected</div><div style="font-size:13px">Create a portfolio using the dropdown in the header.</div></div>`; return; }
+  const stratLabel={Buffett:'🏦 Buffett',Darvas:'📈 Darvas',CoveredCall:'📞 Covered Call',Mixed:'⚡ Mixed'};
+  wrap.innerHTML=`<div class="pf-header-bar">
+    <div class="pf-header-color" style="background:${pf.color||'#C9A84C'}"></div>
+    <div>
+      <div class="pf-header-name">${pf.name}</div>
+      ${pf.description?`<div class="pf-header-desc">${pf.description}</div>`:''}
+      <span class="pf-header-tag">${stratLabel[pf.strategy_focus]||pf.strategy_focus||'Mixed'}</span>
+    </div>
+    <div class="pf-header-actions">
+      <button class="pf-header-btn" onclick="openCreateModal(${pf.id})">✏️ Edit</button>
+      <button class="pf-header-btn danger" onclick="openDeleteModal(${pf.id})">🗑 Delete</button>
+    </div>
+  </div>`;
+
+  const pfHoldings = holdings.filter(h=>h.portfolio_id===activePortfolioId);
+  const tbody = document.getElementById('pf-tbody');
+  const empty = document.getElementById('pf-empty');
+  const totBar = document.getElementById('pf-totals-bar');
+  document.getElementById('pf-count').textContent = pfHoldings.length+' stock'+(pfHoldings.length!==1?'s':'');
+
+  if(!pfHoldings.length){ tbody.innerHTML=''; empty.style.display='block'; totBar.style.display='none'; return; }
+  empty.style.display='none'; totBar.style.display='block';
+
+  const stratLabel2={Buffett:'🏦 Buffett',Darvas:'📈 Darvas',CoveredCall:'📞 CC',Mixed:'⚡ Mixed',None:'—'};
+  tbody.innerHTML = pfHoldings.map(h=>{
+    const invested=h.shares*h.buy, value=h.shares*(h.cur||h.buy);
+    const pnl=value-invested, pnlPct=invested>0?(pnl/invested)*100:0;
+    const pc=pnl>=0?'#2D6A4F':'#8B2635';
+    return `<tr>
+      <td><div class="ticker">${h.ticker}</div><div class="company">${h.name}</div></td>
+      <td>${h.sector||'—'}</td><td>${(h.shares||0).toLocaleString()}</td>
+      <td>${fmt(h.buy)}</td><td>${fmt(h.cur||h.buy)}</td>
+      <td style="font-weight:500">${fmt(value)}</td>
+      <td style="color:${pc};font-weight:500">${pnl>=0?'+':''}${fmt(pnl)}</td>
+      <td style="color:${pc}">${(pnlPct>=0?'+':'')+pnlPct.toFixed(2)}%</td>
+      <td>${h.div>0?fmt(h.div):'—'}</td>
+      <td><span class="badge badge-gold">${stratLabel2[h.strat]||h.strat||'—'}</span></td>
+      <td style="font-size:11px;color:var(--ink3);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${h.notes||'—'}</td>
+      <td><button class="del-btn" onclick="deleteHolding(${h.id})">✕</button></td>
+    </tr>`;
+  }).join('');
+
+  const totInvested=pfHoldings.reduce((s,h)=>s+h.shares*h.buy,0);
+  const totValue=pfHoldings.reduce((s,h)=>s+h.shares*(h.cur||h.buy),0);
+  const totPnl=totValue-totInvested, totPct=totInvested>0?(totPnl/totInvested)*100:0;
+  const totDiv=pfHoldings.reduce((s,h)=>s+(h.div||0),0);
+  const pc2=totPnl>=0?'#5CC994':'#E07070';
+  document.getElementById('pf-tot-invested').textContent=fmt(totInvested);
+  document.getElementById('pf-tot-value').textContent=fmt(totValue);
+  document.getElementById('pf-tot-pnl').style.color=pc2;
+  document.getElementById('pf-tot-pnl').textContent=(totPnl>=0?'+':'')+fmt(totPnl);
+  document.getElementById('pf-tot-pct').style.color=pc2;
+  document.getElementById('pf-tot-pct').textContent=(totPct>=0?'+':'')+totPct.toFixed(2)+'%';
+  document.getElementById('pf-tot-div').textContent=fmt(totDiv);
+}
+
+// ══════════════════════════════════════════════════
+// RENDER — DASHBOARD
+// ══════════════════════════════════════════════════
+function renderDashboard(){
+  const cards = document.getElementById('dash-pf-cards');
+  if(!portfolios.length){
+    cards.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:2rem;color:var(--ink3);font-size:13px;">No portfolios yet. Create one using the dropdown above.</div>`;
+  } else {
+    cards.innerHTML = portfolios.map(pf=>{
+      const pfH = holdings.filter(h=>h.portfolio_id===pf.id);
+      const totInvested=pfH.reduce((s,h)=>s+h.shares*h.buy,0);
+      const totValue=pfH.reduce((s,h)=>s+h.shares*(h.cur||h.buy),0);
+      const totPnl=totValue-totInvested, totPct=totInvested>0?(totPnl/totInvested)*100:0;
+      const pc=totPnl>=0?'#2D6A4F':'#8B2635';
+      const stratLabel={Buffett:'🏦 Buffett',Darvas:'📈 Darvas',CoveredCall:'📞 Covered Call',Mixed:'⚡ Mixed'};
+      return `<div class="dash-pf-card" style="cursor:pointer" onclick="selectPortfolio(${pf.id});switchTab('portfolio')">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:${pf.color||'#C9A84C'};border-radius:14px 14px 0 0"></div>
+        <div class="dash-pf-card-header">
+          <span class="pf-color-dot" style="background:${pf.color||'#C9A84C'};width:10px;height:10px;border-radius:50%;display:inline-block"></span>
+          <span class="dash-pf-name">${pf.name}</span>
+          <span class="dash-pf-tag">${stratLabel[pf.strategy_focus]||'Mixed'}</span>
+        </div>
+        <div class="dash-pf-metrics">
+          <div><div class="dash-pf-metric-label">Market value</div><div class="dash-pf-metric-value">${pfH.length?fmt(totValue):'—'}</div></div>
+          <div><div class="dash-pf-metric-label">Total P&L</div><div class="dash-pf-metric-value" style="color:${pc}">${pfH.length?(totPnl>=0?'+':'')+fmt(totPnl):'—'}</div></div>
+          <div><div class="dash-pf-metric-label">Return</div><div class="dash-pf-metric-value" style="color:${pc}">${pfH.length?(totPct>=0?'+':'')+totPct.toFixed(1)+'%':'—'}</div></div>
+          <div><div class="dash-pf-metric-label">Holdings</div><div class="dash-pf-metric-value">${pfH.length}</div></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+  renderRecs();
+}
+
+// ══════════════════════════════════════════════════
+// RENDER — HELD IN (cross-portfolio badge)
+// ══════════════════════════════════════════════════
+function heldInBadge(ticker){
+  const pfs = portfolios.filter(pf=>holdings.some(h=>h.portfolio_id===pf.id&&h.ticker===ticker));
+  if(!pfs.length) return '<span style="color:var(--ink3);font-size:11px;">—</span>';
+  return pfs.map(pf=>`<span class="badge" style="background:${pf.color}22;color:${pf.color};border:1px solid ${pf.color}44">✓ ${pf.name}</span>`).join(' ');
+}
+
+// ══════════════════════════════════════════════════
+// SCREENER DATA (sample — will be enriched via FMP)
+// ══════════════════════════════════════════════════
+const ccData=[
+  {ticker:"AAPL",name:"Apple Inc.",sector:"Technology",iv:28,vol:45000,prem:1.8,dte:35,delta:0.30,score:88},
+  {ticker:"MSFT",name:"Microsoft",sector:"Technology",iv:25,vol:38000,prem:1.5,dte:30,delta:0.28,score:85},
+  {ticker:"NVDA",name:"Nvidia",sector:"Technology",iv:52,vol:72000,prem:4.2,dte:30,delta:0.35,score:76},
+  {ticker:"META",name:"Meta Platforms",sector:"Technology",iv:40,vol:55000,prem:3.0,dte:28,delta:0.36,score:80},
+  {ticker:"GOOGL",name:"Alphabet",sector:"Technology",iv:30,vol:29000,prem:2.0,dte:32,delta:0.31,score:82},
+  {ticker:"PFE",name:"Pfizer",sector:"Healthcare",iv:32,vol:22000,prem:2.1,dte:38,delta:0.32,score:82},
+  {ticker:"JNJ",name:"J&J",sector:"Healthcare",iv:18,vol:9000,prem:0.9,dte:45,delta:0.22,score:68},
+  {ticker:"ABT",name:"Abbott Labs",sector:"Healthcare",iv:22,vol:8500,prem:1.2,dte:40,delta:0.24,score:72},
+  {ticker:"JPM",name:"JPMorgan Chase",sector:"Finance",iv:24,vol:18000,prem:1.6,dte:33,delta:0.27,score:81},
+  {ticker:"GS",name:"Goldman Sachs",sector:"Finance",iv:30,vol:12000,prem:2.0,dte:40,delta:0.31,score:79},
+  {ticker:"AMZN",name:"Amazon",sector:"Consumer",iv:35,vol:40000,prem:2.5,dte:30,delta:0.33,score:83},
+  {ticker:"TSLA",name:"Tesla",sector:"Consumer",iv:65,vol:90000,prem:5.5,dte:25,delta:0.40,score:65},
+  {ticker:"KO",name:"Coca-Cola",sector:"Consumer",iv:16,vol:7000,prem:0.8,dte:42,delta:0.20,score:62},
+  {ticker:"XOM",name:"ExxonMobil",sector:"Energy",iv:27,vol:14000,prem:1.7,dte:36,delta:0.29,score:77},
+  {ticker:"CVX",name:"Chevron",sector:"Energy",iv:26,vol:11000,prem:1.6,dte:34,delta:0.28,score:74},
+];
+const bufData=[
+  {ticker:"AAPL",name:"Apple Inc.",sector:"Technology",pe:28,roe:160,de:1.76,eg:12,fcf:3.8,div:0.5,moat:"Brand",score:90},
+  {ticker:"KO",name:"Coca-Cola",sector:"Consumer",pe:22,roe:38,de:1.60,eg:6,fcf:4.5,div:3.1,moat:"Brand",score:92},
+  {ticker:"BRK",name:"Berkshire Hathaway",sector:"Finance",pe:20,roe:18,de:0.45,eg:9,fcf:5.2,div:0.0,moat:"Cost",score:91},
+  {ticker:"MSFT",name:"Microsoft",sector:"Technology",pe:30,roe:43,de:0.37,eg:15,fcf:4.0,div:0.8,moat:"Network",score:89},
+  {ticker:"V",name:"Visa",sector:"Finance",pe:29,roe:44,de:0.56,eg:13,fcf:4.1,div:0.7,moat:"Network",score:88},
+  {ticker:"MA",name:"Mastercard",sector:"Finance",pe:31,roe:150,de:2.10,eg:14,fcf:3.7,div:0.5,moat:"Network",score:85},
+  {ticker:"JNJ",name:"J&J",sector:"Healthcare",pe:16,roe:25,de:0.50,eg:7,fcf:5.1,div:2.9,moat:"IP",score:86},
+  {ticker:"PG",name:"Procter & Gamble",sector:"Consumer",pe:24,roe:30,de:0.65,eg:8,fcf:3.9,div:2.4,moat:"Brand",score:87},
+  {ticker:"MCD",name:"McDonald's",sector:"Consumer",pe:22,roe:200,de:5.80,eg:10,fcf:6.1,div:2.2,moat:"Brand",score:80},
+  {ticker:"AMGN",name:"Amgen",sector:"Healthcare",pe:17,roe:76,de:3.20,eg:9,fcf:6.5,div:3.5,moat:"IP",score:79},
+  {ticker:"NKE",name:"Nike",sector:"Consumer",pe:23,roe:35,de:0.72,eg:7,fcf:3.3,div:1.7,moat:"Brand",score:77},
+  {ticker:"ORCL",name:"Oracle",sector:"Technology",pe:20,roe:200,de:7.10,eg:8,fcf:5.5,div:1.3,moat:"Switch",score:74},
+];
+const dvData=[
+  {ticker:"NVDA",name:"Nvidia",sector:"Technology",boxH:950,boxL:820,tightness:8,volSurge:3.2,mom3m:42,rs:96,status:"Breaking",score:95,wks:4},
+  {ticker:"META",name:"Meta Platforms",sector:"Technology",boxH:620,boxL:570,tightness:9,volSurge:2.1,mom3m:28,rs:88,status:"Recent",score:88,wks:6},
+  {ticker:"UBER",name:"Uber",sector:"Technology",boxH:85,boxL:78,tightness:9,volSurge:1.8,mom3m:22,rs:82,status:"Forming",score:80,wks:5},
+  {ticker:"LLY",name:"Eli Lilly",sector:"Healthcare",boxH:890,boxL:820,tightness:8,volSurge:2.4,mom3m:33,rs:91,status:"Breaking",score:91,wks:3},
+  {ticker:"CRWD",name:"CrowdStrike",sector:"Technology",boxH:395,boxL:360,tightness:10,volSurge:2.8,mom3m:38,rs:93,status:"Breaking",score:92,wks:4},
+  {ticker:"TSLA",name:"Tesla",sector:"Consumer",boxH:310,boxL:265,tightness:17,volSurge:1.4,mom3m:12,rs:65,status:"Forming",score:62,wks:10},
+  {ticker:"AMZN",name:"Amazon",sector:"Consumer",boxH:220,boxL:205,tightness:7,volSurge:1.7,mom3m:15,rs:75,status:"Recent",score:78,wks:6},
+  {ticker:"AVGO",name:"Broadcom",sector:"Technology",boxH:195,boxL:182,tightness:7,volSurge:2.0,mom3m:25,rs:86,status:"Recent",score:84,wks:5},
+  {ticker:"XOM",name:"ExxonMobil",sector:"Energy",boxH:122,boxL:114,tightness:7,volSurge:1.5,mom3m:8,rs:68,status:"Forming",score:66,wks:9},
+  {ticker:"GS",name:"Goldman Sachs",sector:"Finance",boxH:580,boxL:540,tightness:7,volSurge:1.6,mom3m:18,rs:78,status:"Forming",score:76,wks:7},
+];
+
+// ══════════════════════════════════════════════════
+// LIVE FILTER HELPERS
+// ══════════════════════════════════════════════════
+let ccSector='All', bufMoat='All', dvStatus='All';
+
+function getLiveFilteredCC(){
+  const minIV=+document.getElementById('cc-iv').value;
+  const minVol=+document.getElementById('cc-vol').value;
+  const minPrem=+document.getElementById('cc-prem').value;
+  const dteMin=+document.getElementById('cc-dte-min').value;
+  const dteMax=+document.getElementById('cc-dte-max').value;
+  return ccData.filter(s=>(ccSector==='All'||s.sector===ccSector)&&s.iv>=minIV&&s.vol>=minVol&&s.prem>=minPrem&&s.dte>=dteMin&&s.dte<=dteMax);
+}
+function getLiveFilteredBuf(){
+  const maxPE=+document.getElementById('buf-pe').value;
+  const minROE=+document.getElementById('buf-roe').value;
+  const maxDE=+document.getElementById('buf-de').value;
+  const minEG=+document.getElementById('buf-eg').value;
+  const minFCF=+document.getElementById('buf-fcf').value;
+  const minDiv=+document.getElementById('buf-div').value;
+  return bufData.filter(s=>(bufMoat==='All'||s.moat===bufMoat)&&s.pe<=maxPE&&s.roe>=minROE&&s.de<=maxDE&&s.eg>=minEG&&s.fcf>=minFCF&&s.div>=minDiv);
+}
+function getLiveFilteredDV(){
+  const maxBox=+document.getElementById('dv-box').value;
+  const minVol=+document.getElementById('dv-vol').value;
+  const minMom=+document.getElementById('dv-mom').value;
+  const minRS=+document.getElementById('dv-rs').value;
+  const maxWks=+document.getElementById('dv-wks').value;
+  return dvData.filter(s=>(dvStatus==='All'||s.status===dvStatus)&&s.tightness<=maxBox&&s.volSurge>=minVol&&s.mom3m>=minMom&&s.rs>=minRS&&s.wks<=maxWks);
+}
+
+// ══════════════════════════════════════════════════
+// RENDER — RECOMMENDATIONS
+// ══════════════════════════════════════════════════
+function renderRecs(){
+  const allTickers = new Set(holdings.map(h=>h.ticker));
+  const passCC=getLiveFilteredCC(), passBuf=getLiveFilteredBuf(), passDV=getLiveFilteredDV();
+  const passCCt=new Set(passCC.map(s=>s.ticker)), passBuft=new Set(passBuf.map(s=>s.ticker)), passDVt=new Set(passDV.map(s=>s.ticker));
+
+  const recs=[];
+  // Holdings matching strategies
+  holdings.forEach(h=>{
+    const pf=portfolios.find(p=>p.id===h.portfolio_id);
+    const inCC=passCC.find(s=>s.ticker===h.ticker);
+    const inBuf=passBuf.find(s=>s.ticker===h.ticker);
+    const inDV=passDV.find(s=>s.ticker===h.ticker);
+    if((inCC||inBuf||inDV)&&!recs.find(r=>r.ticker===h.ticker&&r.type==='hold')){
+      const badges=[], reasons=[];
+      if(inCC){badges.push('<span class="badge badge-blue">📞 CC</span>');reasons.push(`CC fit — IV ${inCC.iv}%, prem ${inCC.prem}%`);}
+      if(inBuf){badges.push('<span class="badge badge-green">🏦 Buffett</span>');reasons.push(`ROE ${inBuf.roe}%, P/E ${inBuf.pe}×`);}
+      if(inDV){badges.push('<span class="badge badge-amber">📈 Darvas</span>');reasons.push(`${inDV.status.toLowerCase()} breakout`);}
+      const pfDot=pf?`<span class="rec-pf-dot" style="background:${pf.color||'#C9A84C'}"></span>`:'';
+      recs.push({type:'hold',ticker:h.ticker,name:h.name,reason:reasons.join(' · '),badgesHtml:badges.join(' '),pfDot,pfName:pf?.name||''});
+    }
+  });
+
+  // New picks
+  const pool=[
+    ...passCC.filter(s=>s.score>=80&&!allTickers.has(s.ticker)).map(s=>({...s,src:'cc'})),
+    ...passBuf.filter(s=>s.score>=85&&!allTickers.has(s.ticker)).map(s=>({...s,src:'buf'})),
+    ...passDV.filter(s=>s.score>=85&&!allTickers.has(s.ticker)).map(s=>({...s,src:'dv'})),
+  ];
+  const seen=new Set();
+  pool.sort((a,b)=>b.score-a.score).forEach(s=>{
+    if(seen.has(s.ticker)||recs.length>=8) return;
+    seen.add(s.ticker);
+    const badges=[];
+    if(passCCt.has(s.ticker)) badges.push('<span class="badge badge-blue">📞 CC</span>');
+    if(passBuft.has(s.ticker)) badges.push('<span class="badge badge-green">🏦 Buffett</span>');
+    if(passDVt.has(s.ticker)) badges.push('<span class="badge badge-amber">📈 Darvas</span>');
+    let reason='';
+    if(s.src==='cc') reason=`New pick — IV ${s.iv}%, prem ${s.prem}%, DTE ${s.dte}d`;
+    else if(s.src==='buf') reason=`New pick — ROE ${s.roe}%, P/E ${s.pe}×, ${s.moat} moat`;
+    else reason=`New pick — ${s.status.toLowerCase()}, vol surge ${s.volSurge}×, RS ${s.rs}`;
+    recs.push({type:'new',ticker:s.ticker,name:s.name,reason,badgesHtml:badges.join(' '),pfDot:'',pfName:''});
+  });
+
+  const el=document.getElementById('recs-list');
+  if(!recs.length){ el.innerHTML='<div style="font-size:13px;color:var(--ink3);padding:.5rem 0;">No matches with current filters. Try relaxing screener criteria or add holdings.</div>'; return; }
+  el.innerHTML=recs.map(r=>`<div class="rec-item">
+    <div class="rec-ticker-box ${r.type}">${r.ticker}</div>
+    <div class="rec-info">
+      <div class="rec-name" style="display:flex;align-items:center;gap:5px;">${r.pfDot}${r.name}${r.pfName?`<span style="font-size:10px;color:var(--ink3)">(${r.pfName})</span>`:''}</div>
+      <div class="rec-reason">${r.reason}</div>
+    </div>
+    <div class="rec-badges">${r.badgesHtml}</div>
+  </div>`).join('');
+}
+
+// ══════════════════════════════════════════════════
+// SCREENER RENDERS
+// ══════════════════════════════════════════════════
+function scoreColor(s){return s>=80?'#2D6A4F':s>=65?'#7A5A00':'#8B2635';}
+function scoreBadge(s){return s>=80?'badge-green':s>=65?'badge-amber':'badge-red';}
+function scoreCell(s){return `<div class="score-wrap"><div class="score-bar-bg"><div class="score-bar-fill" style="width:${s}%;background:${scoreColor(s)}"></div></div><span class="score-num" style="color:${scoreColor(s)}">${s}</span></div>`;}
+
+function renderCC(){
+  const f=getLiveFilteredCC().sort((a,b)=>b.score-a.score);
+  document.getElementById('cc-count').textContent=f.length+' stocks found';
+  const tbody=document.getElementById('cc-tbody');
+  if(!f.length){tbody.innerHTML=`<tr><td colspan="10" class="no-results">No stocks match — try relaxing a filter.</td></tr>`;renderRecs();return;}
+  tbody.innerHTML=f.map(s=>`<tr>
+    <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
+    <td>${s.sector}</td><td>${s.iv}%</td><td>${s.vol.toLocaleString()}</td>
+    <td>${s.prem.toFixed(1)}%</td><td>${s.dte}d</td><td>${s.delta.toFixed(2)}</td>
+    <td>${scoreCell(s.score)}</td>
+    <td><span class="badge ${scoreBadge(s.score)}">${s.score>=80?'Strong':s.score>=65?'Moderate':'Weak'}</span></td>
+    <td>${heldInBadge(s.ticker)}</td>
+  </tr>`).join('');
+  renderRecs();
+}
+
+function renderBuf(){
+  const f=getLiveFilteredBuf().sort((a,b)=>b.score-a.score);
+  document.getElementById('buf-count').textContent=f.length+' stocks found';
+  const tbody=document.getElementById('buf-tbody');
+  const mc={Brand:'badge-blue',Network:'badge-green',Cost:'badge-amber',Switch:'badge-blue',IP:'badge-green'};
+  if(!f.length){tbody.innerHTML=`<tr><td colspan="11" class="no-results">No stocks match.</td></tr>`;renderRecs();return;}
+  tbody.innerHTML=f.map(s=>`<tr>
+    <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
+    <td>${s.sector}</td><td>${s.pe}×</td><td>${s.roe}%</td><td>${s.de.toFixed(2)}×</td>
+    <td>${s.eg}%/yr</td><td>${s.fcf.toFixed(1)}%</td><td>${s.div.toFixed(1)}%</td>
+    <td><span class="badge ${mc[s.moat]||'badge-blue'}">${s.moat}</span></td>
+    <td>${scoreCell(s.score)}</td><td>${heldInBadge(s.ticker)}</td>
+  </tr>`).join('');
+  renderRecs();
+}
+
+function renderDV(){
+  const f=getLiveFilteredDV().sort((a,b)=>b.score-a.score);
+  document.getElementById('dv-count').textContent=f.length+' stocks found';
+  const tbody=document.getElementById('dv-tbody');
+  const sb={Breaking:'badge-green',Forming:'badge-amber',Recent:'badge-blue'};
+  const sl={Breaking:'🔥 Breaking out',Forming:'📦 Box forming',Recent:'✅ Recent break'};
+  if(!f.length){tbody.innerHTML=`<tr><td colspan="11" class="no-results">No stocks match.</td></tr>`;renderRecs();return;}
+  tbody.innerHTML=f.map(s=>`<tr>
+    <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
+    <td>${s.sector}</td><td>$${s.boxH}</td><td>$${s.boxL}</td>
+    <td>${s.tightness}%</td><td>${s.volSurge.toFixed(1)}×</td><td>+${s.mom3m}%</td><td>${s.rs}</td>
+    <td><span class="badge ${sb[s.status]}">${sl[s.status]}</span></td>
+    <td>${scoreCell(s.score)}</td><td>${heldInBadge(s.ticker)}</td>
+  </tr>`).join('');
+  renderRecs();
+}
+
+// ══════════════════════════════════════════════════
+// FILTER EVENT LISTENERS
+// ══════════════════════════════════════════════════
+[['cc-iv',v=>document.getElementById('cc-iv-val').textContent=v+'%'],
+ ['cc-vol',v=>document.getElementById('cc-vol-val').textContent=(+v).toLocaleString()],
+ ['cc-prem',v=>document.getElementById('cc-prem-val').textContent=(+v).toFixed(1)+'%'],
+ ['cc-dte-min',v=>document.getElementById('cc-dte-min-val').textContent=v+'d'],
+ ['cc-dte-max',v=>document.getElementById('cc-dte-max-val').textContent=v+'d'],
+ ['cc-delta',v=>document.getElementById('cc-delta-val').textContent=(v/100).toFixed(2)+'–'+(v/100+.2).toFixed(2)],
+].forEach(([id,fn])=>document.getElementById(id).addEventListener('input',e=>{fn(e.target.value);renderCC();}));
+
+[['buf-pe',v=>document.getElementById('buf-pe-val').textContent=v+'×'],
+ ['buf-roe',v=>document.getElementById('buf-roe-val').textContent=v+'%'],
+ ['buf-de',v=>document.getElementById('buf-de-val').textContent=(+v).toFixed(1)+'×'],
+ ['buf-eg',v=>document.getElementById('buf-eg-val').textContent=v+'%'],
+ ['buf-fcf',v=>document.getElementById('buf-fcf-val').textContent=(+v).toFixed(1)+'%'],
+ ['buf-div',v=>document.getElementById('buf-div-val').textContent=(+v).toFixed(1)+'%'],
+].forEach(([id,fn])=>document.getElementById(id).addEventListener('input',e=>{fn(e.target.value);renderBuf();}));
+
+[['dv-high',v=>document.getElementById('dv-high-val').textContent='Within '+v+'%'],
+ ['dv-vol',v=>document.getElementById('dv-vol-val').textContent=(+v).toFixed(1)+'×'],
+ ['dv-box',v=>document.getElementById('dv-box-val').textContent=v+'%'],
+ ['dv-mom',v=>document.getElementById('dv-mom-val').textContent=v+'%'],
+ ['dv-rs',v=>document.getElementById('dv-rs-val').textContent=v],
+ ['dv-wks',v=>document.getElementById('dv-wks-val').textContent=v+' weeks'],
+].forEach(([id,fn])=>document.getElementById(id).addEventListener('input',e=>{fn(e.target.value);renderDV();}));
+
+document.getElementById('cc-sectors').addEventListener('click',e=>{if(e.target.classList.contains('pill')){document.querySelectorAll('#cc-sectors .pill').forEach(p=>p.classList.remove('active'));e.target.classList.add('active');ccSector=e.target.dataset.sector;renderCC();}});
+document.getElementById('buf-moat').addEventListener('click',e=>{if(e.target.classList.contains('pill')){document.querySelectorAll('#buf-moat .pill').forEach(p=>p.classList.remove('active'));e.target.classList.add('active');bufMoat=e.target.dataset.moat;renderBuf();}});
+document.getElementById('dv-status').addEventListener('click',e=>{if(e.target.classList.contains('pill')){document.querySelectorAll('#dv-status .pill').forEach(p=>p.classList.remove('active'));e.target.classList.add('active');dvStatus=e.target.dataset.status;renderDV();}});
+
+// ══════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════
+function switchTab(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+}
+document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
+
+// ══════════════════════════════════════════════════
+// HELPERS
+// ══════════════════════════════════════════════════
+function fmt(n,d=2){return '$'+(+n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
+
+function setStatus(state, text){
+  const dot=document.getElementById('status-dot');
+  document.getElementById('status-text').textContent=text;
+  dot.className='status-dot';
+  if(state==='live') dot.classList.add('live');
+  else if(state==='loading') dot.classList.add('loading');
+}
+
+let toastTimer;
+function showToast(msg){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>el.classList.remove('show'),3000);
+}
+
+function renderAll(){
+  renderPfDropdown();
+  renderDashboard();
+  renderPortfolioTab();
+  renderCC(); renderBuf(); renderDV();
+}
+
+// ══════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════
+buildColorPicker();
+loadAll();
+</script>
+</body>
+</html>
