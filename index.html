@@ -213,6 +213,15 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
 .btn-danger{padding:9px 20px;border-radius:9px;background:var(--red-light);border:none;color:var(--red);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;}
 .toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--ink);color:#fff;padding:10px 18px;border-radius:10px;font-size:13px;z-index:600;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
+/* ── Status banners ── */
+.data-banner{display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:10px;font-size:12px;margin-bottom:1.25rem;line-height:1.5;}
+.data-banner.mock{background:#FFF3CC;border:1px solid #E8D87A;color:#7A5A00;}
+.data-banner.live{background:var(--green-light);border:1px solid #9FDFC4;color:var(--green);}
+.data-banner.partial{background:var(--blue-light);border:1px solid #9FC3E8;color:var(--blue);}
+.data-banner-icon{font-size:16px;flex-shrink:0;}
+.data-banner strong{font-weight:500;}
+
+
 
 @media(max-width:900px){.dash-nav-grid{grid-template-columns:1fr 1fr;}}
 @media(max-width:600px){
@@ -301,9 +310,9 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
 <div class="tab-bar">
   <button class="tab active" data-tab="dashboard">🏠 Dashboard</button>
   <button class="tab" data-tab="portfolio">💼 My Portfolios</button>
-  <button class="tab" data-tab="covered-call">📞 Covered Calls</button>
-  <button class="tab" data-tab="buffett">🏦 Buffett Screen</button>
-  <button class="tab" data-tab="darvas">📈 Darvas Boxes</button>
+  <button class="tab" data-tab="covered-call">📞 Covered Calls <span style="font-size:9px;background:#E8D87A;color:#7A5A00;padding:1px 5px;border-radius:4px;margin-left:3px;font-weight:500">MOCK</span></button>
+  <button class="tab" data-tab="buffett">🏦 Buffett Screen <span style="font-size:9px;background:#D8F0E5;color:#2D6A4F;padding:1px 5px;border-radius:4px;margin-left:3px;font-weight:500">LIVE</span></button>
+  <button class="tab" data-tab="darvas">📈 Darvas Boxes <span style="font-size:9px;background:#D8F0E5;color:#2D6A4F;padding:1px 5px;border-radius:4px;margin-left:3px;font-weight:500">LIVE</span></button>
 </div>
 
 <main>
@@ -341,6 +350,53 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
     <div class="learn-card"><h3>🏦 Warren Buffett</h3><p>Buy wonderful companies at fair prices and hold them forever.</p><ul class="learn-rule"><li>P/E below 25, ROE above 15%</li><li>Consistent earnings growth 5+ years</li><li>Low debt, strong free cash flow</li><li>Businesses you can understand</li></ul></div>
     <div class="learn-card"><h3>📈 Nicholas Darvas</h3><p>Buy stocks breaking out of tight "boxes" on high volume and ride the trend.</p><ul class="learn-rule"><li>Price forms a tight range (the "box")</li><li>Breakout on 2x+ average volume</li><li>Stop-loss just below the box floor</li><li>Only buy in strong uptrends</li></ul></div>
   </div>
+  <hr class="divider">
+  <div class="section-title" style="margin-bottom:10px;">Productionisation status</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-bottom:1.5rem;">
+    <div style="background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4CAF50;flex-shrink:0"></span>
+        <span style="font-weight:500;font-size:13px;">💼 Portfolio tracker</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Fully live. Supabase persistence, Finnhub price refresh, multi-portfolio, auth.</div>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4CAF50;flex-shrink:0"></span>
+        <span style="font-weight:500;font-size:13px;">🏦 Buffett screener</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Fully live. P/E, ROE, D/E, FCF, dividend yield and EPS growth via FMP TTM API. Moat curated manually.</div>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#4CAF50;flex-shrink:0"></span>
+        <span style="font-weight:500;font-size:13px;">📈 Darvas screener</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Fully live. Box algorithm computed from 3-month Finnhub OHLCV. Relative strength vs SPY included.</div>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#E8C020;flex-shrink:0"></span>
+        <span style="font-weight:500;font-size:13px;">📞 Covered Call screener</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">⚠️ Mock data. IV, volume, premium yield, delta and DTE are hardcoded samples. Needs live options API — Market Data App ($29/mo) or Interactive Brokers TWS (free with IB account, requires Vercel proxy).</div>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#E8C020;flex-shrink:0"></span>
+        <span style="font-weight:500;font-size:13px;">✨ Recommendations (CC)</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">⚠️ Partially mock. Buffett and Darvas recommendations are live. CC-sourced suggestions use mock options data and should be treated as illustrative only.</div>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--cream3);border-radius:12px;padding:14px 16px;">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="width:8px;height:8px;border-radius:50%;background:#aaa;flex-shrink:0"></span>
+        <span style="font-weight:500;font-size:13px;">🔔 Price alerts</span>
+      </div>
+      <div style="font-size:12px;color:var(--ink3);line-height:1.5;">Not built yet. Planned: Supabase Edge Functions + Resend email alerts for breakouts and target prices.</div>
+    </div>
+  </div>
+
   <div class="disclaimer">⚠️ <strong>Important:</strong> This tool is for educational and research purposes only. Live data is provided by Finnhub and FMP. This is not financial advice. Please consult a licensed financial adviser before making investment decisions.</div>
 </div>
 
@@ -405,15 +461,20 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
   <div class="strategy-hero"><div class="strategy-badge">📞</div><div>
     <h2>Covered Call Screener</h2>
     <p>Screen for stocks with liquid options markets, ideal implied volatility, and attractive premium yields.</p>
-    <div class="strategy-rules"><span class="rule-chip">IV &gt; 20%</span><span class="rule-chip">Delta 0.20–0.40</span><span class="rule-chip">30–45 DTE</span><span class="rule-chip">Vol &gt; 5,000/day</span><span class="rule-chip">Premium &gt; 1.5%</span></div>
+    <div class="strategy-rules"><span class="rule-chip">IV &gt; 20%</span><span class="rule-chip">Delta 0.20–0.40</span><span class="rule-chip">Min 30 DTE</span><span class="rule-chip">Vol &gt; 5,000/day</span><span class="rule-chip">Premium &gt; 1.5%</span></div>
   </div></div>
+  <!-- MOCK DATA BANNER -->
+  <div class="data-banner mock">
+    <span class="data-banner-icon">⚠️</span>
+    <div><strong>Mock data — not ready for real use.</strong> Implied volatility, options volume, premium yield, delta and DTE are all hardcoded sample values. Live options data requires a paid API (e.g. Market Data App $29/mo or Interactive Brokers TWS). Filters and scores work correctly but the underlying numbers are illustrative only.</div>
+  </div>
+
   <div class="filter-section"><div class="section-title">Filters</div>
     <div class="filter-grid">
       <div class="filter-card"><div class="filter-label">Min implied volatility</div><div class="filter-value" id="cc-iv-val">20%</div><input type="range" min="10" max="60" value="20" step="1" id="cc-iv"><div class="range-bounds"><span>10%</span><span>60%</span></div></div>
       <div class="filter-card"><div class="filter-label">Min options volume</div><div class="filter-value" id="cc-vol-val">5,000</div><input type="range" min="1000" max="50000" value="5000" step="1000" id="cc-vol"><div class="range-bounds"><span>1K</span><span>50K</span></div></div>
       <div class="filter-card"><div class="filter-label">Min premium yield</div><div class="filter-value" id="cc-prem-val">1.5%</div><input type="range" min="0.5" max="10" value="1.5" step="0.5" id="cc-prem"><div class="range-bounds"><span>0.5%</span><span>10%</span></div></div>
-      <div class="filter-card"><div class="filter-label">Min DTE</div><div class="filter-value" id="cc-dte-min-val">20d</div><input type="range" min="7" max="90" value="20" step="1" id="cc-dte-min"><div class="range-bounds"><span>7d</span><span>90d</span></div></div>
-      <div class="filter-card"><div class="filter-label">Max DTE</div><div class="filter-value" id="cc-dte-max-val">50d</div><input type="range" min="7" max="90" value="50" step="1" id="cc-dte-max"><div class="range-bounds"><span>7d</span><span>90d</span></div></div>
+      <div class="filter-card"><div class="filter-label">Min DTE</div><div class="filter-value" id="cc-dte-min-val">0d</div><input type="range" min="0" max="90" value="0" step="1" id="cc-dte-min"><div class="range-bounds"><span>0d</span><span>90d</span></div></div>
       <div class="filter-card"><div class="filter-label">Target delta</div><div class="filter-value" id="cc-delta-val">0.20–0.40</div><input type="range" min="10" max="50" value="20" step="5" id="cc-delta"><div class="range-bounds"><span>OTM 0.10</span><span>ATM 0.50</span></div></div>
     </div>
   </div>
@@ -428,6 +489,10 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
 
 <!-- ══ BUFFETT ══ -->
 <div class="section" id="tab-buffett">
+  <div class="data-banner live">
+    <span class="data-banner-icon">✅</span>
+    <div><strong>Live data.</strong> P/E, ROE, debt/equity, FCF yield, dividend yield and EPS growth are live TTM figures from FMP (Financial Modeling Prep). Moat ratings are manually curated. Loads when you first open this tab.</div>
+  </div>
   <div class="strategy-hero"><div class="strategy-badge">🏦</div><div>
     <h2>Warren Buffett Value Screen</h2>
     <p>Find wonderful businesses at fair prices with durable moats, predictable earnings, low debt, and strong ROE.</p>
@@ -449,11 +514,15 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
   </div>
   <div class="results-bar"><div class="results-label">Results</div><div class="results-count" id="buf-count"></div></div>
   <div class="table-wrap"><table><thead><tr><th>Stock</th><th>Sector</th><th>P/E</th><th>ROE</th><th>Debt/Eq.</th><th>5yr EPS</th><th>FCF yield</th><th>Div yield</th><th>Moat</th><th>Score</th><th>Held in</th></tr></thead><tbody id="buf-tbody"></tbody></table></div>
-  <div class="disclaimer">* Fundamental data powered by FMP (Financial Modeling Prep). Refresh fundamentals periodically for accuracy.</div>
+  <div class="disclaimer">📡 Fundamental data powered by FMP (Financial Modeling Prep) — P/E, ROE, Debt/Equity, FCF yield, and dividend yield are live TTM figures. EPS growth is the 5-year average. Moat ratings are manually curated. Data loads when you first open this tab and is cached for the session.</div>
 </div>
 
 <!-- ══ DARVAS ══ -->
 <div class="section" id="tab-darvas">
+  <div class="data-banner live">
+    <span class="data-banner-icon">✅</span>
+    <div><strong>Live data.</strong> Box levels, volume surge, momentum and relative strength are all calculated from real 3-month daily price history via Finnhub. Loads when you first open this tab.</div>
+  </div>
   <div class="strategy-hero"><div class="strategy-badge">📈</div><div>
     <h2>Darvas Box Momentum Screen</h2>
     <p>Nicholas Darvas turned $25,000 into $2,250,000 in 18 months. Buy breakouts from tight consolidation boxes on surging volume.</p>
@@ -475,7 +544,7 @@ hr.divider{border:none;border-top:1px solid var(--cream3);margin:1.5rem 0;}
   </div>
   <div class="results-bar"><div class="results-label">Results</div><div class="results-count" id="dv-count"></div></div>
   <div class="table-wrap"><table><thead><tr><th>Stock</th><th>Sector</th><th>Box high</th><th>Box low</th><th>Tightness</th><th>Vol surge</th><th>3m gain</th><th>RS</th><th>Status</th><th>Score</th><th>Held in</th></tr></thead><tbody id="dv-tbody"></tbody></table></div>
-  <div class="disclaimer">* Darvas box data is sample/illustrative. Always confirm breakout with real-time charts before trading.</div>
+  <div class="disclaimer">📡 Darvas box data is calculated live from 3 months of daily OHLCV price history via Finnhub. Box tops, floors, volume surge, momentum and relative strength (vs SPY) are all computed algorithmically. Data loads when you first open this tab and is cached for the session. Always confirm breakouts with a real-time chart before trading.</div>
 </div>
 
 </main>
@@ -956,32 +1025,261 @@ const ccData=[
   {ticker:"XOM",name:"ExxonMobil",sector:"Energy",iv:27,vol:14000,prem:1.7,dte:36,delta:0.29,score:77},
   {ticker:"CVX",name:"Chevron",sector:"Energy",iv:26,vol:11000,prem:1.6,dte:34,delta:0.28,score:74},
 ];
+// bufData: moat + identity only — live numbers fetched from FMP and merged at runtime
 const bufData=[
-  {ticker:"AAPL",name:"Apple Inc.",sector:"Technology",pe:28,roe:160,de:1.76,eg:12,fcf:3.8,div:0.5,moat:"Brand",score:90},
-  {ticker:"KO",name:"Coca-Cola",sector:"Consumer",pe:22,roe:38,de:1.60,eg:6,fcf:4.5,div:3.1,moat:"Brand",score:92},
-  {ticker:"BRK",name:"Berkshire Hathaway",sector:"Finance",pe:20,roe:18,de:0.45,eg:9,fcf:5.2,div:0.0,moat:"Cost",score:91},
-  {ticker:"MSFT",name:"Microsoft",sector:"Technology",pe:30,roe:43,de:0.37,eg:15,fcf:4.0,div:0.8,moat:"Network",score:89},
-  {ticker:"V",name:"Visa",sector:"Finance",pe:29,roe:44,de:0.56,eg:13,fcf:4.1,div:0.7,moat:"Network",score:88},
-  {ticker:"MA",name:"Mastercard",sector:"Finance",pe:31,roe:150,de:2.10,eg:14,fcf:3.7,div:0.5,moat:"Network",score:85},
-  {ticker:"JNJ",name:"J&J",sector:"Healthcare",pe:16,roe:25,de:0.50,eg:7,fcf:5.1,div:2.9,moat:"IP",score:86},
-  {ticker:"PG",name:"Procter & Gamble",sector:"Consumer",pe:24,roe:30,de:0.65,eg:8,fcf:3.9,div:2.4,moat:"Brand",score:87},
-  {ticker:"MCD",name:"McDonald's",sector:"Consumer",pe:22,roe:200,de:5.80,eg:10,fcf:6.1,div:2.2,moat:"Brand",score:80},
-  {ticker:"AMGN",name:"Amgen",sector:"Healthcare",pe:17,roe:76,de:3.20,eg:9,fcf:6.5,div:3.5,moat:"IP",score:79},
-  {ticker:"NKE",name:"Nike",sector:"Consumer",pe:23,roe:35,de:0.72,eg:7,fcf:3.3,div:1.7,moat:"Brand",score:77},
-  {ticker:"ORCL",name:"Oracle",sector:"Technology",pe:20,roe:200,de:7.10,eg:8,fcf:5.5,div:1.3,moat:"Switch",score:74},
+  {ticker:"AAPL",name:"Apple Inc.",sector:"Technology",moat:"Brand"},
+  {ticker:"KO",name:"Coca-Cola",sector:"Consumer",moat:"Brand"},
+  {ticker:"BRK.B",name:"Berkshire Hathaway",sector:"Finance",moat:"Cost"},
+  {ticker:"MSFT",name:"Microsoft",sector:"Technology",moat:"Network"},
+  {ticker:"V",name:"Visa",sector:"Finance",moat:"Network"},
+  {ticker:"MA",name:"Mastercard",sector:"Finance",moat:"Network"},
+  {ticker:"JNJ",name:"J&J",sector:"Healthcare",moat:"IP"},
+  {ticker:"PG",name:"Procter & Gamble",sector:"Consumer",moat:"Brand"},
+  {ticker:"MCD",name:"McDonald's",sector:"Consumer",moat:"Brand"},
+  {ticker:"AMGN",name:"Amgen",sector:"Healthcare",moat:"IP"},
+  {ticker:"NKE",name:"Nike",sector:"Consumer",moat:"Brand"},
+  {ticker:"ORCL",name:"Oracle",sector:"Technology",moat:"Switch"},
 ];
-const dvData=[
-  {ticker:"NVDA",name:"Nvidia",sector:"Technology",boxH:950,boxL:820,tightness:8,volSurge:3.2,mom3m:42,rs:96,status:"Breaking",score:95,wks:4},
-  {ticker:"META",name:"Meta Platforms",sector:"Technology",boxH:620,boxL:570,tightness:9,volSurge:2.1,mom3m:28,rs:88,status:"Recent",score:88,wks:6},
-  {ticker:"UBER",name:"Uber",sector:"Technology",boxH:85,boxL:78,tightness:9,volSurge:1.8,mom3m:22,rs:82,status:"Forming",score:80,wks:5},
-  {ticker:"LLY",name:"Eli Lilly",sector:"Healthcare",boxH:890,boxL:820,tightness:8,volSurge:2.4,mom3m:33,rs:91,status:"Breaking",score:91,wks:3},
-  {ticker:"CRWD",name:"CrowdStrike",sector:"Technology",boxH:395,boxL:360,tightness:10,volSurge:2.8,mom3m:38,rs:93,status:"Breaking",score:92,wks:4},
-  {ticker:"TSLA",name:"Tesla",sector:"Consumer",boxH:310,boxL:265,tightness:17,volSurge:1.4,mom3m:12,rs:65,status:"Forming",score:62,wks:10},
-  {ticker:"AMZN",name:"Amazon",sector:"Consumer",boxH:220,boxL:205,tightness:7,volSurge:1.7,mom3m:15,rs:75,status:"Recent",score:78,wks:6},
-  {ticker:"AVGO",name:"Broadcom",sector:"Technology",boxH:195,boxL:182,tightness:7,volSurge:2.0,mom3m:25,rs:86,status:"Recent",score:84,wks:5},
-  {ticker:"XOM",name:"ExxonMobil",sector:"Energy",boxH:122,boxL:114,tightness:7,volSurge:1.5,mom3m:8,rs:68,status:"Forming",score:66,wks:9},
-  {ticker:"GS",name:"Goldman Sachs",sector:"Finance",boxH:580,boxL:540,tightness:7,volSurge:1.6,mom3m:18,rs:78,status:"Forming",score:76,wks:7},
+
+// Cache for FMP fundamental data — keyed by ticker
+const fmpCache = {};
+let fmpLoaded = false;
+let fmpLoading = false;
+
+// Buffett score calculator from live metrics
+function calcBufScore(d){
+  let s = 50;
+  if(d.pe>0   && d.pe<=15)  s+=15; else if(d.pe<=25) s+=8;  else if(d.pe>40) s-=10;
+  if(d.roe>=30)             s+=15; else if(d.roe>=15) s+=8;  else if(d.roe<10) s-=10;
+  if(d.de<=0.5)             s+=10; else if(d.de<=1.0) s+=5;  else if(d.de>2)   s-=8;
+  if(d.eg>=15)              s+=10; else if(d.eg>=8)   s+=5;  else if(d.eg<3)   s-=5;
+  if(d.fcf>=5)              s+=8;  else if(d.fcf>=2)  s+=4;
+  if(d.div>=2)              s+=5;  else if(d.div>=0.5) s+=2;
+  const moatBonus={Brand:7,Network:8,IP:6,Cost:5,Switch:5};
+  s += moatBonus[d.moat]||0;
+  return Math.min(99, Math.max(10, Math.round(s)));
+}
+
+// Fetch FMP fundamentals for all bufData tickers (called once when Buffett tab opens)
+async function loadFmpData(){
+  if(fmpLoaded || fmpLoading) return;
+  fmpLoading = true;
+  const tbody = document.getElementById('buf-tbody');
+  tbody.innerHTML='<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--ink3)"><span style="animation:pulse 1s infinite;display:inline-block">⏳</span> Loading live fundamentals from FMP…</td></tr>';
+
+  let fetched = 0;
+  for(const stock of bufData){
+    try {
+      // Ratios TTM — gives peRatioTTM, returnOnEquityTTM, debtEquityRatioTTM, dividendYieldTTM, freeCashFlowYieldTTM
+      const r1 = await fetch(`https://financialmodelingprep.com/api/v3/ratios-ttm/${stock.ticker}?apikey=${FMP_KEY}`);
+      const d1 = await r1.json();
+      const ratios = Array.isArray(d1) ? d1[0] : d1;
+
+      // Income statement growth — gives epsgrowth for 5-year avg
+      const r2 = await fetch(`https://financialmodelingprep.com/api/v3/income-statement-growth/${stock.ticker}?limit=5&apikey=${FMP_KEY}`);
+      const d2 = await r2.json();
+      const growthArr = Array.isArray(d2) ? d2 : [];
+      const avgEPSGrowth = growthArr.length
+        ? (growthArr.reduce((s,g)=>s+(g.growthEPS||0),0)/growthArr.length)*100
+        : null;
+
+      if(ratios){
+        const pe  = Math.abs(+(ratios.peRatioTTM||0));
+        const roe = +(ratios.returnOnEquityTTM||0)*100;
+        const de  = Math.abs(+(ratios.debtEquityRatioTTM||0));
+        const fcf = +(ratios.freeCashFlowYieldTTM||0)*100;
+        const div = +(ratios.dividendYieldTTM||0)*100;
+        const eg  = avgEPSGrowth !== null ? +avgEPSGrowth : 0;
+        fmpCache[stock.ticker] = { pe, roe, de, fcf, div, eg };
+        fetched++;
+      }
+    } catch(e){
+      console.warn(`FMP fetch failed for ${stock.ticker}:`, e);
+    }
+    // Small delay to respect rate limits (250 req/day free tier = ~10ms min spacing fine)
+    await new Promise(r=>setTimeout(r,120));
+  }
+
+  fmpLoaded = true;
+  fmpLoading = false;
+  console.log(`FMP: loaded ${fetched}/${bufData.length} tickers`);
+  renderBuf();
+}
+
+// Merge live FMP data into bufData entry
+function getBufStock(base){
+  const live = fmpCache[base.ticker];
+  if(!live) return {...base, pe:null, roe:null, de:null, eg:null, fcf:null, div:null, score:null, _loading:true};
+  const merged = {...base, ...live};
+  merged.score = calcBufScore(merged);
+  return merged;
+}
+
+// dvUniverse: tickers to scan — live Darvas box data calculated from Finnhub OHLCV
+const dvUniverse = [
+  {ticker:"NVDA",name:"Nvidia",sector:"Technology"},
+  {ticker:"META",name:"Meta Platforms",sector:"Technology"},
+  {ticker:"AAPL",name:"Apple Inc.",sector:"Technology"},
+  {ticker:"MSFT",name:"Microsoft",sector:"Technology"},
+  {ticker:"GOOGL",name:"Alphabet",sector:"Technology"},
+  {ticker:"AMZN",name:"Amazon",sector:"Consumer"},
+  {ticker:"TSLA",name:"Tesla",sector:"Consumer"},
+  {ticker:"AVGO",name:"Broadcom",sector:"Technology"},
+  {ticker:"CRWD",name:"CrowdStrike",sector:"Technology"},
+  {ticker:"UBER",name:"Uber",sector:"Technology"},
+  {ticker:"LLY",name:"Eli Lilly",sector:"Healthcare"},
+  {ticker:"JPM",name:"JPMorgan Chase",sector:"Finance"},
+  {ticker:"GS",name:"Goldman Sachs",sector:"Finance"},
+  {ticker:"XOM",name:"ExxonMobil",sector:"Energy"},
+  {ticker:"ISRG",name:"Intuitive Surgical",sector:"Healthcare"},
 ];
+
+// Live Darvas results — populated by loadDarvasData()
+let dvData = [];
+let dvLoaded = false;
+let dvLoading = false;
+// Cache SPY returns for relative strength calculation
+let spyReturn3m = null;
+
+// ── DARVAS BOX ALGORITHM ──────────────────────────────
+// Input: arrays of daily close prices, highs, lows, volumes (oldest first)
+// Returns: {boxH, boxL, tightness, volSurge, mom3m, rs, status, wks, score}
+function calcDarvasBox(closes, highs, lows, volumes, spyRet){
+  const n = closes.length;
+  if(n < 60) return null;
+
+  // 1. Find the most recent Darvas box top
+  //    A box top = a high that is not exceeded for the next 3 consecutive days
+  let boxTopIdx = -1;
+  for(let i = n-4; i >= n-60; i--){
+    const h = highs[i];
+    if(highs[i+1] < h && highs[i+2] < h && highs[i+3] < h){
+      boxTopIdx = i;
+      break;
+    }
+  }
+  if(boxTopIdx === -1) return null;
+
+  const boxH = highs[boxTopIdx];
+
+  // 2. Box floor = lowest close from boxTopIdx to now
+  const boxSlice = closes.slice(boxTopIdx);
+  const boxL = Math.min(...boxSlice);
+  const tightness = ((boxH - boxL) / boxL) * 100;
+  if(tightness > 35) return null; // too wide to be a valid box
+
+  // 3. Volume surge = latest 5-day avg vs prior 20-day avg
+  const recentVol = volumes.slice(-5).reduce((a,b)=>a+b,0) / 5;
+  const baseVol   = volumes.slice(-25,-5).reduce((a,b)=>a+b,0) / 20;
+  const volSurge  = baseVol > 0 ? recentVol / baseVol : 1;
+
+  // 4. 3-month momentum = price change from 63 trading days ago
+  const mom3m = closes.length >= 63
+    ? ((closes[n-1] - closes[n-63]) / closes[n-63]) * 100
+    : ((closes[n-1] - closes[0]) / closes[0]) * 100;
+
+  // 5. Relative strength vs SPY (if available)
+  const rs = spyRet !== null
+    ? Math.round(50 + (mom3m - spyRet) * 1.5)
+    : Math.round(50 + mom3m * 0.8);
+  const rsClamped = Math.max(1, Math.min(99, rs));
+
+  // 6. Weeks in box
+  const wks = Math.round((n - 1 - boxTopIdx) / 5);
+
+  // 7. Breakout status
+  const latestClose = closes[n-1];
+  const prevClose   = closes[n-2];
+  let status;
+  if(latestClose > boxH && volSurge >= 1.5){
+    status = 'Breaking';
+  } else if(prevClose > boxH && latestClose > boxH * 0.99){
+    status = 'Recent';
+  } else {
+    status = 'Forming';
+  }
+
+  // 8. Darvas score
+  let score = 50;
+  if(tightness <= 8)       score += 15; else if(tightness <= 15) score += 8;
+  if(volSurge >= 2.5)      score += 15; else if(volSurge >= 1.5) score += 8;
+  if(mom3m >= 30)          score += 12; else if(mom3m >= 15)     score += 6;
+  if(rsClamped >= 85)      score += 12; else if(rsClamped >= 70) score += 6;
+  if(status === 'Breaking') score += 15;
+  else if(status === 'Recent') score += 8;
+  if(wks <= 4)             score += 5;  else if(wks > 12)        score -= 5;
+  score = Math.max(10, Math.min(99, Math.round(score)));
+
+  return {
+    boxH: Math.round(boxH * 100) / 100,
+    boxL: Math.round(boxL * 100) / 100,
+    tightness: Math.round(tightness * 10) / 10,
+    volSurge: Math.round(volSurge * 10) / 10,
+    mom3m: Math.round(mom3m * 10) / 10,
+    rs: rsClamped,
+    status,
+    wks: Math.max(0, wks),
+    score
+  };
+}
+
+// ── FETCH AND COMPUTE DARVAS DATA ─────────────────────
+async function loadDarvasData(){
+  if(dvLoaded || dvLoading) return;
+  dvLoading = true;
+  document.getElementById('dv-tbody').innerHTML =
+    `<tr><td colspan="11" style="text-align:center;padding:2rem;color:var(--ink3)">
+      <span style="display:inline-block;animation:pulse 1s infinite">⏳</span>
+      Fetching 3 months of price history from Finnhub…
+    </td></tr>`;
+  document.getElementById('dv-count').textContent = 'Loading…';
+
+  // Date range: 180 calendar days back to get ~90 trading days
+  const now   = Math.floor(Date.now() / 1000);
+  const from  = now - 180 * 24 * 3600;
+
+  // Fetch SPY first for relative strength baseline
+  try {
+    const spyRes  = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=SPY&resolution=D&from=${from}&to=${now}&token=${FINNHUB_KEY}`);
+    const spyData = await spyRes.json();
+    if(spyData.s === 'ok' && spyData.c.length >= 10){
+      const sc = spyData.c;
+      spyReturn3m = ((sc[sc.length-1] - sc[0]) / sc[0]) * 100;
+    }
+  } catch(e){ console.warn('SPY fetch failed:', e); }
+
+  const results = [];
+  let fetched = 0;
+
+  for(const stock of dvUniverse){
+    try {
+      const res  = await fetch(`https://finnhub.io/api/v1/stock/candle?symbol=${stock.ticker}&resolution=D&from=${from}&to=${now}&token=${FINNHUB_KEY}`);
+      const data = await res.json();
+      if(data.s !== 'ok' || !data.c || data.c.length < 30){
+        console.warn(`Darvas: insufficient data for ${stock.ticker}`);
+        continue;
+      }
+      const box = calcDarvasBox(data.c, data.h, data.l, data.v, spyReturn3m);
+      if(box){
+        results.push({...stock, ...box});
+        fetched++;
+        // Re-render progressively as each stock loads
+        dvData = results;
+        renderDV();
+      }
+    } catch(e){ console.warn(`Darvas fetch failed for ${stock.ticker}:`, e); }
+
+    // Respect Finnhub free tier: 60 req/min = 1 per second is safe
+    await new Promise(r => setTimeout(r, 1100));
+  }
+
+  dvData = results;
+  dvLoaded = true;
+  dvLoading = false;
+  console.log(`Darvas: computed boxes for ${fetched}/${dvUniverse.length} tickers`);
+  renderDV();
+  renderRecs();
+}
 
 // ══════════════════════════════════════════════════
 // LIVE FILTER HELPERS
@@ -993,8 +1291,7 @@ function getLiveFilteredCC(){
   const minVol=+document.getElementById('cc-vol').value;
   const minPrem=+document.getElementById('cc-prem').value;
   const dteMin=+document.getElementById('cc-dte-min').value;
-  const dteMax=+document.getElementById('cc-dte-max').value;
-  return ccData.filter(s=>(ccSector==='All'||s.sector===ccSector)&&s.iv>=minIV&&s.vol>=minVol&&s.prem>=minPrem&&s.dte>=dteMin&&s.dte<=dteMax);
+  return ccData.filter(s=>(ccSector==='All'||s.sector===ccSector)&&s.iv>=minIV&&s.vol>=minVol&&s.prem>=minPrem&&s.dte>=dteMin);
 }
 function getLiveFilteredBuf(){
   const maxPE=+document.getElementById('buf-pe').value;
@@ -1003,7 +1300,18 @@ function getLiveFilteredBuf(){
   const minEG=+document.getElementById('buf-eg').value;
   const minFCF=+document.getElementById('buf-fcf').value;
   const minDiv=+document.getElementById('buf-div').value;
-  return bufData.filter(s=>(bufMoat==='All'||s.moat===bufMoat)&&s.pe<=maxPE&&s.roe>=minROE&&s.de<=maxDE&&s.eg>=minEG&&s.fcf>=minFCF&&s.div>=minDiv);
+  return bufData
+    .map(s=>getBufStock(s))
+    .filter(s=>{
+      if(s._loading) return true; // show loading rows regardless of filters
+      return (bufMoat==='All'||s.moat===bufMoat)
+        && (s.pe===null||s.pe<=maxPE)
+        && (s.roe===null||s.roe>=minROE)
+        && (s.de===null||s.de<=maxDE)
+        && (s.eg===null||s.eg>=minEG)
+        && (s.fcf===null||s.fcf>=minFCF)
+        && (s.div===null||s.div>=minDiv);
+    });
 }
 function getLiveFilteredDV(){
   const maxBox=+document.getElementById('dv-box').value;
@@ -1011,6 +1319,8 @@ function getLiveFilteredDV(){
   const minMom=+document.getElementById('dv-mom').value;
   const minRS=+document.getElementById('dv-rs').value;
   const maxWks=+document.getElementById('dv-wks').value;
+  // dvData is populated live — if empty and loading, return empty
+  if(!dvData.length) return [];
   return dvData.filter(s=>(dvStatus==='All'||s.status===dvStatus)&&s.tightness<=maxBox&&s.volSurge>=minVol&&s.mom3m>=minMom&&s.rs>=minRS&&s.wks<=maxWks);
 }
 
@@ -1054,7 +1364,7 @@ function renderRecs(){
     if(passBuft.has(s.ticker)) badges.push('<span class="badge badge-green">🏦 Buffett</span>');
     if(passDVt.has(s.ticker)) badges.push('<span class="badge badge-amber">📈 Darvas</span>');
     let reason='';
-    if(s.src==='cc') reason=`New pick — IV ${s.iv}%, prem ${s.prem}%, DTE ${s.dte}d`;
+    if(s.src==='cc') reason=`New pick — IV ${s.iv}%, prem ${s.prem}%, DTE ${s.dte}d <em style="color:var(--ink3)">(mock options data)</em>`;
     else if(s.src==='buf') reason=`New pick — ROE ${s.roe}%, P/E ${s.pe}×, ${s.moat} moat`;
     else reason=`New pick — ${s.status.toLowerCase()}, vol surge ${s.volSurge}×, RS ${s.rs}`;
     recs.push({type:'new',ticker:s.ticker,name:s.name,reason,badgesHtml:badges.join(' '),pfDot:'',pfName:''});
@@ -1096,34 +1406,85 @@ function renderCC(){
 }
 
 function renderBuf(){
-  const f=getLiveFilteredBuf().sort((a,b)=>b.score-a.score);
-  document.getElementById('buf-count').textContent=f.length+' stocks found';
+  const all=getLiveFilteredBuf();
+  const loaded=all.filter(s=>!s._loading);
+  const loading=all.filter(s=>s._loading);
+  const f=[...loaded.sort((a,b)=>b.score-a.score), ...loading];
+  document.getElementById('buf-count').textContent=
+    fmpLoaded ? f.length+' stocks found (live data)'
+    : fmpLoading ? `Loading… (${Object.keys(fmpCache).length}/${bufData.length})`
+    : f.length+' stocks';
   const tbody=document.getElementById('buf-tbody');
   const mc={Brand:'badge-blue',Network:'badge-green',Cost:'badge-amber',Switch:'badge-blue',IP:'badge-green'};
   if(!f.length){tbody.innerHTML=`<tr><td colspan="11" class="no-results">No stocks match.</td></tr>`;renderRecs();return;}
-  tbody.innerHTML=f.map(s=>`<tr>
-    <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
-    <td>${s.sector}</td><td>${s.pe}×</td><td>${s.roe}%</td><td>${s.de.toFixed(2)}×</td>
-    <td>${s.eg}%/yr</td><td>${s.fcf.toFixed(1)}%</td><td>${s.div.toFixed(1)}%</td>
-    <td><span class="badge ${mc[s.moat]||'badge-blue'}">${s.moat}</span></td>
-    <td>${scoreCell(s.score)}</td><td>${heldInBadge(s.ticker)}</td>
-  </tr>`).join('');
+
+  function fmtVal(v, suffix='', dec=1){
+    if(v===null||v===undefined||isNaN(v)) return '<span style="color:var(--ink3)">…</span>';
+    return v.toFixed(dec)+suffix;
+  }
+
+  tbody.innerHTML=f.map(s=>{
+    if(s._loading) return `<tr style="opacity:.5">
+      <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
+      <td>${s.sector}</td>
+      <td colspan="8" style="color:var(--ink3);font-size:12px">
+        <span style="display:inline-block;animation:pulse 1s infinite">⏳</span> Fetching live data…
+      </td>
+      <td>${heldInBadge(s.ticker)}</td>
+    </tr>`;
+    return `<tr>
+      <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
+      <td>${s.sector}</td>
+      <td>${fmtVal(s.pe,'×',1)}</td>
+      <td>${fmtVal(s.roe,'%',1)}</td>
+      <td>${fmtVal(s.de,'×',2)}</td>
+      <td>${fmtVal(s.eg,'%/yr',1)}</td>
+      <td>${fmtVal(s.fcf,'%',1)}</td>
+      <td>${fmtVal(s.div,'%',1)}</td>
+      <td><span class="badge ${mc[s.moat]||'badge-blue'}">${s.moat}</span></td>
+      <td>${s.score?scoreCell(s.score):'<span style="color:var(--ink3)">…</span>'}</td>
+      <td>${heldInBadge(s.ticker)}</td>
+    </tr>`;
+  }).join('');
   renderRecs();
 }
 
 function renderDV(){
   const f=getLiveFilteredDV().sort((a,b)=>b.score-a.score);
-  document.getElementById('dv-count').textContent=f.length+' stocks found';
-  const tbody=document.getElementById('dv-tbody');
+  const countEl = document.getElementById('dv-count');
+  const tbody = document.getElementById('dv-tbody');
   const sb={Breaking:'badge-green',Forming:'badge-amber',Recent:'badge-blue'};
   const sl={Breaking:'🔥 Breaking out',Forming:'📦 Box forming',Recent:'✅ Recent break'};
-  if(!f.length){tbody.innerHTML=`<tr><td colspan="11" class="no-results">No stocks match.</td></tr>`;renderRecs();return;}
+
+  if(dvLoading && !dvData.length){
+    countEl.textContent='Loading…';
+    return; // tbody already showing loading message from loadDarvasData
+  }
+  if(!dvLoaded && !dvLoading && !dvData.length){
+    countEl.textContent='Click Darvas tab to load';
+    tbody.innerHTML=`<tr><td colspan="11" class="no-results">Open the Darvas Boxes tab to fetch live data.</td></tr>`;
+    renderRecs(); return;
+  }
+
+  const loadingNote = dvLoading ? ` (${dvData.length}/${dvUniverse.length} loaded…)` : ' (live)';
+  countEl.textContent = f.length + ' stocks found' + loadingNote;
+
+  if(!f.length){
+    tbody.innerHTML=`<tr><td colspan="11" class="no-results">No stocks match current filters — try relaxing a criterion.</td></tr>`;
+    renderRecs(); return;
+  }
   tbody.innerHTML=f.map(s=>`<tr>
     <td><div class="ticker">${s.ticker}</div><div class="company">${s.name}</div></td>
-    <td>${s.sector}</td><td>$${s.boxH}</td><td>$${s.boxL}</td>
-    <td>${s.tightness}%</td><td>${s.volSurge.toFixed(1)}×</td><td>+${s.mom3m}%</td><td>${s.rs}</td>
+    <td>${s.sector}</td>
+    <td>$${s.boxH.toFixed(2)}</td>
+    <td>$${s.boxL.toFixed(2)}</td>
+    <td>${s.tightness.toFixed(1)}%</td>
+    <td>${s.volSurge.toFixed(1)}×</td>
+    <td>${s.mom3m >= 0 ? '+' : ''}${s.mom3m.toFixed(1)}%</td>
+    <td>${s.rs}</td>
     <td><span class="badge ${sb[s.status]}">${sl[s.status]}</span></td>
-    <td>${scoreCell(s.score)}</td><td>${heldInBadge(s.ticker)}</td>
+    <td>${scoreCell(s.score)}</td>
+    <td>${heldInBadge(s.ticker)}</td>
   </tr>`).join('');
   renderRecs();
 }
@@ -1135,7 +1496,6 @@ function renderDV(){
  ['cc-vol',v=>document.getElementById('cc-vol-val').textContent=(+v).toLocaleString()],
  ['cc-prem',v=>document.getElementById('cc-prem-val').textContent=(+v).toFixed(1)+'%'],
  ['cc-dte-min',v=>document.getElementById('cc-dte-min-val').textContent=v+'d'],
- ['cc-dte-max',v=>document.getElementById('cc-dte-max-val').textContent=v+'d'],
  ['cc-delta',v=>document.getElementById('cc-delta-val').textContent=(v/100).toFixed(2)+'–'+(v/100+.2).toFixed(2)],
 ].forEach(([id,fn])=>document.getElementById(id).addEventListener('input',e=>{fn(e.target.value);renderCC();}));
 
@@ -1167,6 +1527,10 @@ function switchTab(id){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
   document.querySelector(`.tab[data-tab="${id}"]`).classList.add('active');
+  // Trigger FMP load lazily when Buffett tab is first opened
+  if(id==='buffett' && !fmpLoaded && !fmpLoading) loadFmpData();
+  // Trigger Darvas load lazily when Darvas tab is first opened
+  if(id==='darvas' && !dvLoaded && !dvLoading) loadDarvasData();
 }
 document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>switchTab(t.dataset.tab)));
 
